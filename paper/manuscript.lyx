@@ -1,0 +1,784 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass revtex4
+\begin_preamble
+%\usepackage{lastpage}
+%\usepackage{fancyhdr}
+%\pagestyle{fancy} 
+%\renewcommand{\headrulewidth}{0pt}
+%\usepackage{bbm}
+%\fancyhf{}               % Clear fancy header/footer
+%\fancyfoot[R]{\thepage / \pageref{LastPage}}  % Page number in Right footer
+%\makeatletter
+%\let\ps@plain\ps@fancy   % Plain page style = fancy page style
+%\makeatother
+
+%\usepackage[paper=a4paper,margin=0.8in]{geometry}
+%\usepackage[T1]{fontenc}
+%\renewcommand{\familydefault}{\sfdefault}
+%\usepackage{titlesec}
+
+%\titleformat*{\section}{\large\bfseries}
+%\titleformat*{\subsection}{\large\bfseries}
+%\titleformat*{\subsubsection}{\large\bfseries}
+%\titleformat*{\paragraph}{\large\bfseries}
+%\titleformat*{\subparagraph}{\large\bfseries}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "helvet" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Graphical Models of Molecular Kinetics
+\end_layout
+
+\begin_layout Author
+Simon Olsson
+\end_layout
+
+\begin_layout Author Email
+simon.olsson@fu-berlin.de
+\end_layout
+
+\begin_layout Author
+Frank Noé
+\end_layout
+
+\begin_layout Author Email
+frank.noe@fu-berlin.de
+\end_layout
+
+\begin_layout Affiliation
+Department of Mathematics and Computer Science, Freie Universität Berlin,
+ 14195 Berlin, Germany
+\end_layout
+
+\begin_layout Abstract
+Markov state models and related Master equation models are powerful tools
+ to study the kinetics of conformational change in molecules.
+ These models segment the conformational space into 'global' configurational
+ states whose mutual exchange is modeled using simulation or experimental
+ data.
+ This approach generally works well when the number of segments is larger
+ than the number of meta-stable states at a given time-resolution, 
+\begin_inset Formula $\tau$
+\end_inset
+
+, and sufficient simulation data is available to parameterize the transition
+ probabilities or rates in-between the global conformations.
+ We here describe an alternative approach which leverages a molecular representa
+tion based upon several local discretizations.
+ The underlying model takes the form of a Markov random field (MRF) which
+ is a 
+\begin_inset Formula $q$
+\end_inset
+
+-state generalization of the Ising model from statistical physics.
+ We present maximum likelihood inference schemes and demonstrate their performan
+ce through applications to two molecular systems – a penta-peptide and a
+ small fast-folding protein – and compare predictions to Markov state models.
+ The approach allows us to predict the likelihood of state configurations
+ which have not been directly observed in the training data, and reconstruct
+ Markov state models describing the dynamics on all possible configurations
+ of the system in the used representation.
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+Obtaining highly resolved models of the kinetics of conformational space
+ is an important outstanding problem in biophysics.
+ Sampling problem and force-field problem.
+ 
+\end_layout
+
+\begin_layout Standard
+The general model takes the form of a Markov random field (MRF), or Potts
+ model, which is an undirected graphical model.
+ A MRF is a generalization of the Ising model, modelling the pair-wise couplings
+, 
+\begin_inset Formula $J_{ij}^{lk}$
+\end_inset
+
+, and local fields, 
+\begin_inset Formula $h_{i}^{l}$
+\end_inset
+
+, of 
+\begin_inset Formula $N$
+\end_inset
+
+ 
+\begin_inset Formula $q$
+\end_inset
+
+-state 'spins'.
+ 
+\end_layout
+
+\begin_layout Section
+Theory
+\end_layout
+
+\begin_layout Subsection
+Markov models of large systems
+\end_layout
+
+\begin_layout Subsection
+Graphical models
+\end_layout
+
+\begin_layout Standard
+The Ising model is a simple Hamiltonian model expressing the stationary
+ probability of the configuration of a set of 
+\begin_inset Formula $N$
+\end_inset
+
+ binary 
+\begin_inset Formula $\{-1,1\}$
+\end_inset
+
+-spins 
+\begin_inset Formula $\mathbf{s}$
+\end_inset
+
+ as
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+p(\mathbf{s})=\mathcal{Z}^{-1}\exp(\sum_{i=1}^{N}\sum_{j\neq i}J_{ij}s_{i}s_{j}+h_{i}s_{i})\label{eq:ising}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where the (unit-less) model parameters 
+\begin_inset Formula $J_{ij}=J_{ji}$
+\end_inset
+
+ and 
+\begin_inset Formula $h_{i}$
+\end_inset
+
+ describe the coupling strength between spins 
+\begin_inset Formula $i$
+\end_inset
+
+ and 
+\begin_inset Formula $j$
+\end_inset
+
+ and the local field of spin 
+\begin_inset Formula $i$
+\end_inset
+
+, respectively.
+ While simulating eq.
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:ising"
+
+\end_inset
+
+ can be performed easily given 
+\begin_inset Formula $\{J_{ij}\}$
+\end_inset
+
+ and 
+\begin_inset Formula $\{h_{i}\}$
+\end_inset
+
+ using one of several sampling schemes (Glauber[incl.
+ the Gibbs sampler], Roudi & Hertz etc), the inverse problem ie.
+ estimating these parameters from equilibrium samples is not straight forward.
+ This is a result of the complex dependency of the partition function depends
+ on the model parameters.
+ In fact, exact inference is intractable for systems with large 
+\begin_inset Formula $N$
+\end_inset
+
+.
+ The generalization of this model to multinomial variables (spins) known
+ as the Potts model is subject to the same restriction.
+ Several approximate methods are available.
+\end_layout
+
+\begin_layout Subsection
+The dynamic Ising model: A tractable model of transition probabilities in
+ 
+\begin_inset Formula $N$
+\end_inset
+
+ coupled 2-state systems
+\end_layout
+
+\begin_layout Standard
+Solving the inverse Ising problem with equilibrium samples can be difficult,
+ without resorting to a number of approximations.
+ However, the correspondence between the ergodic dynamics of a system and
+ its invariant measure, allows us to solve the problem with respect to the
+ dynamics and in turn predict the equilibrium properties.
+ To this end, we represent a conditional transition probability 
+\begin_inset Formula $p(\mathbf{s}_{t}\mid\mathbf{s}_{t-\tau})$
+\end_inset
+
+ using an Ising model.
+ The vector 
+\begin_inset Formula $\mathbf{s}_{t}$
+\end_inset
+
+ encodes the configuration of 
+\begin_inset Formula $N$
+\end_inset
+
+ (binary: 
+\begin_inset Formula $\{-1,1\}$
+\end_inset
+
+, for now) subsystems at time 
+\begin_inset Formula $t$
+\end_inset
+
+.
+ We have
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray}
+p(\mathbf{s}_{t}\mid\mathbf{s}_{t-\tau}) & = & \mathcal{Z}^{-1}\exp\left\{ \sum_{i=1}^{N}s_{t,i}(\sum_{j=1}^{N}J_{ij}s_{t-\tau,j}+h_{i})\right\} \nonumber \\
+ & = & \mathcal{Z}^{-1}\exp\left\{ \mathbf{s}_{t}^{\intercal}\mathbf{J}\mathbf{s}_{t-\tau}+\mathbf{s}_{t}^{\intercal}\mathbf{h}\right\} \label{eq:Tdensity}
+\end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $\mathbf{J}\in\mathbb{R}^{N\times N}$
+\end_inset
+
+ is a – not necessarily symmetric – matrix of coupling parameters and 
+\begin_inset Formula $\mathbf{h}$
+\end_inset
+
+ is a vector of local fields and 
+\begin_inset Formula $\mathcal{Z}$
+\end_inset
+
+ is the partition function.
+ We note that the elements of 
+\begin_inset Formula $\mathbf{s}_{t}$
+\end_inset
+
+ are conditionally independent given 
+\begin_inset Formula $\mathbf{s}_{t-\tau}$
+\end_inset
+
+ if 
+\begin_inset Formula $\mathbf{s}$
+\end_inset
+
+ exerts time-discrete Markovian dynamics.
+ Furthermore, we include 'self-coupling' 
+\begin_inset Formula $J_{ii}$
+\end_inset
+
+ in the transition kernel formulation which control the transition rates
+ (discussed further below).
+ Using eq.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:Tdensity"
+
+\end_inset
+
+ we can see the conditional transition probability of a single spin 
+\begin_inset Formula $i$
+\end_inset
+
+ being 
+\begin_inset Formula $1$
+\end_inset
+
+ at 
+\begin_inset Formula $t$
+\end_inset
+
+ given the configuration of spins at 
+\begin_inset Formula $t-\tau$
+\end_inset
+
+, is sigmoid in 
+\begin_inset Formula $\theta_{t-\tau,i}=\sum_{j}J_{ij}s_{t-\tau,j}+h_{i}$
+\end_inset
+
+, 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+p(s_{t,i}=1\mid\mathbf{s}_{t-\tau}) & = & \frac{\exp[\theta_{t-\tau,i}]}{\exp[\theta_{t-\tau,i}]+\exp[-\theta_{t-\tau,i}]}\\
+ & = & \frac{1}{1+\exp[-2\theta_{t-\tau,i}]}.
+\end{eqnarray*}
+
+\end_inset
+
+We emphasize that partition function of the transition probabilities is
+ analytically tractable, and the spin-states at time 
+\begin_inset Formula $t$
+\end_inset
+
+ are conditionally independent on the spin-states at 
+\begin_inset Formula $t-\tau$
+\end_inset
+
+.
+ The latter fact allows us to describe the full transition density as the
+ following product,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+p(\mathbf{s}_{t}\mid\mathbf{s}_{t-\tau})=\prod_{i}^{N}p(s_{t,i}\mid\mathbf{s}_{t-\tau})=\prod_{i}^{N}\frac{1}{1+\exp[-s_{t,i}2\theta_{t-\tau,i}]}.\label{eq:full_tdens}
+\end{equation}
+
+\end_inset
+
+The estimation of 
+\begin_inset Formula $\mathbf{J}$
+\end_inset
+
+ and 
+\begin_inset Formula $\mathbf{h}$
+\end_inset
+
+ in eq.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:full_tdens"
+
+\end_inset
+
+ by maximum likelihood corresponds to solving 
+\begin_inset Formula $N$
+\end_inset
+
+ independent logistic auto-regression problems (Roudi Hertz PRL).
+ Given a time-series of spin-configurations, 
+\begin_inset Formula $\mathbf{S}=\{\mathbf{s}_{0},\mathbf{s}_{\tau},\dots,\mathbf{s}_{T\tau}\}$
+\end_inset
+
+, the likelihood function of the couplings and fields is given by,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\ell(\mathbf{J,\mathbf{h}\mid\mathbf{S}}) & = & \prod_{t=\tau}^{\tau(T-1)}\prod_{i=1}^{N}p(s_{t,i}=1\mid\mathbf{s}_{t-\tau})^{\mathcal{I}_{1}(s_{t,i})}p(s_{t,i}=-1\mid\mathbf{s}_{t-\tau}))^{\mathcal{I}_{-1}(s_{t,i})}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where we have introduced the indicator function 
+\begin_inset Formula $\mathcal{I}_{k}(x)=\begin{cases}
+1 & \text{if }x=k\\
+0 & \text{else}
+\end{cases}$
+\end_inset
+
+.
+ Efficient algorithms are available to solve this class of problems in regulariz
+ed and unregularized flavors (Defazio et al, NIPS 2014).
+\end_layout
+
+\begin_layout Subsubsection
+Generalization to 
+\begin_inset Formula $N$
+\end_inset
+
+ coupled 
+\begin_inset Formula $q$
+\end_inset
+
+-state 'spins': dynamic Potts model
+\end_layout
+
+\begin_layout Standard
+The dynamic Ising model can readily be generalized to cases where each of
+ the spins can take on more than two-states.
+ In the Ising Hamiltonian the product of the two spin states results in
+ an effective 
+\emph on
+exclusive-or
+\emph default
+ operation (
+\begin_inset Formula $\oplus)$
+\end_inset
+
+, whose output is mapped to 
+\begin_inset Formula $\{-1,1\}$
+\end_inset
+
+.
+ We here achieve this by mapping the output of an exclusive-or operation
+ on the two spin throught he linear map, 
+\begin_inset Formula $x:2x-1$
+\end_inset
+
+.
+ The same map is used to ensure the local field contribution is similarly
+ mapped to 
+\begin_inset Formula $\{-1,1\}$
+\end_inset
+
+.
+ We obtain the transition density for the 
+\begin_inset Formula $q$
+\end_inset
+
+ spin states case
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+p(\mathbf{s}_{t}\mid\mathbf{s}_{t-\tau}) & = & \mathcal{Z}^{-1}\exp[\sum_{i}^{N}\sum_{j}^{N}\sum_{l}^{q-1}\sum_{k}^{q-1}J_{i,j}^{l,k}(2s_{t,i}\oplus s_{t-\tau,j}-1)+h_{i}^{l}(2\mathcal{I}_{l}(s_{t,i})-1)]\\
+ & = & \mathcal{Z}_{a}^{-1}\exp\left(\sum_{i}^{N}\sum_{l}^{q-1}\mathcal{I}_{l}(s_{t,i})\sum_{j}^{N}\sum_{k}^{q-1}2J_{i,j}^{l,k}(1-\mathcal{I}_{k}(s_{t-\tau,j}))-J_{i,j}^{l,k}+2h_{i}^{l}\mathcal{I}_{l}(s_{t,i})-h_{i}^{l}\right)\\
+ &  & \hspace{1em}\mathcal{Z}_{b}^{-1}\exp\left(\sum_{i}^{N}\sum_{l}^{q-1}(1-\mathcal{I}_{l}(s_{t,i}))\sum_{j}^{N}\sum_{k}^{q-1}2J_{i,j}^{l,k}\mathcal{I}_{k}(s_{t-\tau,j})-J_{i,j}^{l,k}+2h_{i}^{l}\mathcal{I}_{l}(s_{t,i})-h_{i}^{l}\right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We see that the transition density factors into two mutually exclusive parts.
+ Let us consider first the binary case (
+\begin_inset Formula $q=2$
+\end_inset
+
+): we define the variable 
+\begin_inset Formula $\vartheta_{t-\tau,i}^{l}=h_{i}-\sum_{j}2J_{ij}\mathcal{I}_{l}(s_{t-\tau,j})-J_{ij}$
+\end_inset
+
+, and recover the expression from above,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+p(s_{t,i}=1\mid\mathbf{s}_{t-\tau}) & = & \frac{1}{1+\exp[-2\vartheta_{t-\tau,i}^{1}]}.
+\end{eqnarray*}
+
+\end_inset
+
+More generally the transition probability density of a single spin takes
+ on the form,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+p(s_{t,i}=l\mid\mathbf{s}_{t-\tau}) & = & \frac{\exp[h_{i}^{l}+\sum_{j}^{N}\sum_{k}^{q-1}J_{i,j}^{l,k}-2J_{i,j}^{l,k}\mathcal{I}_{k}(s_{t-\tau,j})]}{1+\sum_{m}^{q-1}\exp[h_{i}^{m}+\sum_{j}^{N}\sum_{k}^{q-1}J_{i,j}^{m,k}-2J_{i,j}^{m,k}\mathcal{I}_{k}(s_{t-\tau,j})]}.
+\end{eqnarray*}
+
+\end_inset
+
+As for the 
+\begin_inset Formula $q=2$
+\end_inset
+
+ case, the transition probabilities are conditionally independent, however,
+ there are now 
+\begin_inset Formula $q$
+\end_inset
+
+ different outcomes.
+ Maximum likelihood estimation of 
+\begin_inset Formula $\{J_{ij}^{kl}\}$
+\end_inset
+
+ and 
+\begin_inset Formula $\{h_{i}^{l}\}$
+\end_inset
+
+ given a time-series of spin-configurations, 
+\begin_inset Formula $\mathbf{S}=\{\mathbf{s}_{0},\mathbf{s}_{\tau},\dots,\mathbf{s}_{T\tau}\}$
+\end_inset
+
+, corresponds to solving 
+\begin_inset Formula $N$
+\end_inset
+
+ soft-max auto-regression problems, which is the multi-category generalization
+ of logistic regression.
+ There are, similarly, efficient schemes available to solve problems of
+ this type.
+\end_layout
+
+\begin_layout Subsubsection
+Stationary and dynamic properties of the dynamic Ising model.
+\end_layout
+
+\begin_layout Standard
+In cases where 
+\begin_inset Formula $\mathbf{J}$
+\end_inset
+
+ is symmetric the dynamics will fulfill detailed balance and the stationary
+ distribution will be given by eq.
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:ising"
+
+\end_inset
+
+.
+ Write down reversibility proof.
+ Not symmetric 
+\begin_inset Formula $\mathbf{J}$
+\end_inset
+
+ has non-equilibrium steady state (Roudi Hertz PRL).
+\end_layout
+
+\begin_layout Standard
+As pointed out above, we include self-couplings 
+\begin_inset Formula $J_{ii}$
+\end_inset
+
+ in the current formulation, unlike in the canonical formulation.
+ The self-couplings do not affect the stationary distribution, however,
+ they control the dynamics in the model.
+ Consider the case with a single spin 
+\begin_inset Formula $s$
+\end_inset
+
+ (
+\begin_inset Formula $N=1$
+\end_inset
+
+), where the only transitions of our full system are 
+\begin_inset Formula $(-1\rightarrow-1),(-1\rightarrow1),(1\rightarrow-1)\text{ and }(1\rightarrow1)$
+\end_inset
+
+, which corresponds to a Bernoulli process.
+ We may use the transition kernel of eq.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:full_tdens"
+
+\end_inset
+
+ to define the transition probability matrix of this process
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray}
+\mathbf{T} & = & \left(\begin{array}{cc}
+\exp[J-h]+\exp[-J-h] & 0\\
+0 & \exp[J+h]+\exp[-J+h]
+\end{array}\right)^{-1}\label{eq:2x2t}\\
+ &  & \hspace{1em}\times\left(\begin{array}{cc}
+\exp[J-h] & \exp[-J-h]\\
+\exp[-J+h] & \exp[J+h]
+\end{array}\right).\nonumber 
+\end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The eigenvalues of 
+\begin_inset Formula $\mathbf{T}$
+\end_inset
+
+ are independent of 
+\begin_inset Formula $h$
+\end_inset
+
+ as
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\lambda_{0}^{\{-1,1\}}=1,\hspace{1em}\lambda_{1}^{\{-1,1\}}=\frac{\exp\left(2J\right)-1}{\exp\left(2J\right)+1}=\tanh(J),
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where the zeroth eigenvalue corresponds to the constant eigenvector, and
+ the first corresponds to the eigenvector involved in the spin-flip operation,
+ respectively.
+ From the eigenvalue associated with the spin-flip event we can compute
+ a spin-flip rate 
+\begin_inset Formula $k$
+\end_inset
+
+,
+\begin_inset Formula 
+\begin{eqnarray*}
+k & = & -\frac{\log\lambda_{1}}{\tau\Delta t}\Rightarrow\\
+J & = & \tanh^{-1}(\exp(-k\tau\Delta t)),
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+with 
+\begin_inset Formula $\tau\Delta t$
+\end_inset
+
+ defining the time-scale.
+ Point out connection to classic paper by Glauber J Math Phys 1963.
+\end_layout
+
+\begin_layout Section
+Results
+\end_layout
+
+\begin_layout Subsection
+Inference of unbiased couplings from biased data
+\end_layout
+
+\begin_layout Itemize
+6-spin 1D Ising model; biased data 
+\end_layout
+
+\begin_layout Subsection
+Molecular dynamics of a penta-peptide
+\end_layout
+
+\begin_layout Itemize
+Comparison with MSM (statdist and time-scales)
+\end_layout
+
+\begin_layout Itemize
+Show robustness of estimates to data-sparsity vs MSMs (data-efficiency)
+\end_layout
+
+\begin_layout Itemize
+Predictions of unobserved molecular states
+\end_layout
+
+\begin_layout Subsection
+Prediction of unobserved meta-stable molecular configurations
+\end_layout
+
+\begin_layout Section
+Discussion
+\end_layout
+
+\begin_layout Standard
+Relationship to Susi and Illias linear model.
+ 
+\end_layout
+
+\begin_layout Acknowledgments
+We thank Fabian Paul, Hao Wu, Christoph Wehmeyer and Tim Hempel for stimulating
+ discussion.
+ We gratefully acknowledge funding from the the Alexander von Humboldt foundatio
+n (Postdoctoral fellowship to SO) and the European Research Council (ERC
+ Consolidator Grant ScaleCell to FN).
+ 
+\end_layout
+
+\end_body
+\end_document
