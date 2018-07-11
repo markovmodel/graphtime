@@ -4,7 +4,7 @@
 \begin_header
 \save_transient_properties true
 \origin unavailable
-\textclass revtex4
+\textclass achemso
 \begin_preamble
 %\usepackage{lastpage}
 %\usepackage{fancyhdr}
@@ -28,6 +28,7 @@
 %\titleformat*{\paragraph}{\large\bfseries}
 %\titleformat*{\subparagraph}{\large\bfseries}
 \end_preamble
+\options journal=acscentsci
 \use_default_options true
 \maintain_unincluded_children false
 \language english
@@ -95,14 +96,16 @@
 \begin_body
 
 \begin_layout Title
-Graphical Models of Molecular Kinetics
+Alt 1: Graphical Models of Molecular Kinetics.
+ Alt 2: Molecular kinetics through a coupling model of localized molecular
+ representations
 \end_layout
 
 \begin_layout Author
 Simon Olsson
 \end_layout
 
-\begin_layout Author Email
+\begin_layout Email
 simon.olsson@fu-berlin.de
 \end_layout
 
@@ -110,7 +113,7 @@ simon.olsson@fu-berlin.de
 Frank Noé
 \end_layout
 
-\begin_layout Author Email
+\begin_layout Email
 frank.noe@fu-berlin.de
 \end_layout
 
@@ -123,30 +126,29 @@ Department of Mathematics and Computer Science, Freie Universität Berlin,
 Markov state models and related Master equation models are powerful tools
  to study the kinetics of conformational change in molecules.
  These models segment the conformational space into 'global' configurational
- states whose mutual exchange is modeled using simulation or experimental
- data.
+ states whose mutual exchange estimated using time-resolved data.
  This approach generally works well when the number of segments is larger
  than the number of meta-stable states at a given time-resolution, 
 \begin_inset Formula $\tau$
 \end_inset
 
-, and sufficient simulation data is available to parameterize the transition
- probabilities or rates in-between the global conformations.
+, and sufficient data is available.
  We here describe an alternative approach which leverages a molecular representa
 tion based upon several local discretizations.
- The underlying model takes the form of a Markov random field (MRF) which
- is a 
-\begin_inset Formula $q$
-\end_inset
-
--state generalization of the Ising model from statistical physics.
- We present maximum likelihood inference schemes and demonstrate their performan
-ce through applications to two molecular systems – a penta-peptide and a
- small fast-folding protein – and compare predictions to Markov state models.
- The approach allows us to predict the likelihood of state configurations
- which have not been directly observed in the training data, and reconstruct
- Markov state models describing the dynamics on all possible configurations
- of the system in the used representation.
+ The time-evolution of the local representations is governed by their mutual
+ dependence and their local tendencies to adopt certain configurations both
+ encoded by the model.
+ The advantage of such a localized model is two-fold: firstly, it constitutes
+ a more compact parametric representation of the dynamics and secondly,
+ it enables prediction of transitions to and from molecular configurations
+ not observed in the data used to parameterize the model.
+ We provide an implementation of such a model using a dynamic variant of
+ a Markov random field (MRF) which is a generalization of the Ising model
+ from statistical physics.
+ We present maximum likelihood inference schemes and show through the applicatio
+n to molecular and model systems how the approach enables the discovery
+ of microscopic system configurations not observed in the data used to estimate
+ the model.
 \end_layout
 
 \begin_layout Section
@@ -154,46 +156,124 @@ Introduction
 \end_layout
 
 \begin_layout Standard
-Obtaining highly resolved models of the kinetics of conformational space
- is an important outstanding problem in biophysics.
- Sampling problem and force-field problem.
+The function of biological macromolecules including proteins is governed
+ by transitions between meta-stable conformational states.
+ An important goal in molecular biophysics is to obtain accurate and highly
+ resolved models of the kinetics of these conformational transitions.
+ Establishing such models – for example Markov state models (MSM) – for
+ smaller proteins, is becoming increasingly feasible due to improvements
+ in simulation strategies, computer hardware as well as improved statistical
+ estimation methods.
+ However, for molecular simulations to have a broader impact within molecular
+ biology, and in particular structural biology, scaling to larger molecular
+ systems is critical.
  
 \end_layout
 
 \begin_layout Standard
-The general model takes the form of a Markov random field (MRF), or Potts
- model, which is an undirected graphical model.
- A MRF is a generalization of the Ising model, modelling the pair-wise couplings
-, 
-\begin_inset Formula $J_{ij}^{lk}$
+MSMs and related Master equation-based models describe the transition probabilit
+ies between mutually exclusive segments of configuration space.
+ These models thereby provide optimal discrete approximations of the transfer
+ operator, 
+\begin_inset Formula $\mathcal{T}$
 \end_inset
 
-, and local fields, 
-\begin_inset Formula $h_{i}^{l}$
+, of the systems molecular dynamics.
+ Given a fixed finite time-resolution, 
+\begin_inset Formula $\tau$
 \end_inset
 
-, of 
+, the number of molecular configurations which are meta-stable, however,
+ grows exponentially with the size of the molecular system.
+ Generating simulation data which sample all possible configurational transition
+s thus rapidly becomes intractable.
+ Larger proteins are therefore not only more time-consuming to simulate
+ due to the increased number of particles to be represented in the simulation,
+ the amount of data necessary to make statistically sound inferences about
+ their behavior is also larger.
+ 
+\end_layout
+
+\begin_layout Standard
+In this paper, we propose an alternative approach to obtaining statistical
+ models of molecular kinetics.
+ The strategy presented here distinguishes itself compared to the methods
+ discussed above by the way the molecular configuration is represented.
+ We depart from global and mutually exclusive configurational states.
+ Instead we consider a configurational state as a combination several locally
+ defined sub-states configurations, for example a rotameric state of a torsion
+ angle.
+ With this representation we construct a probabilistic model which gives
+ us a distribution over all the sub-system configurations at a time, given
+ their configuration at a previous time.
+ A simple example of such a model is a set of independent Markovian models
+ which describe localized conformational changes.
+ This example assumes statistical independence of the dynamics of the different
+ conformational states which is violated in many practical cases, for example
+ the rotameric states of tightly packed side-chains in the hydrophobic core
+ of a protein.
+ To account for statistical dependencies between the sub-systems defined
+ we will need to explicitly model the interaction between the sub-systems.
+ 
+\end_layout
+
+\begin_layout Standard
+A simple statistical model which allows us to model the interactions between
+ multiple discrete statistical variables is the Markov random field (MRF).
+ A well-known example of a MRF is the Ising model from statistical physics:
+ a model of 
 \begin_inset Formula $N$
 \end_inset
 
+ particles on a lattice, each of which adopt one of two configurations,
  
-\begin_inset Formula $q$
+\begin_inset Formula $\uparrow$
 \end_inset
 
--state 'spins'.
+ or 
+\begin_inset Formula $\downarrow$
+\end_inset
+
+.
+ Each particle interacts directly only with its nearest neighbors, and possibly
+ an external field.
+ Although all interactions in the Ising model are local, complicated non-local
+ phenomena arise.
+ Indeed, the Ising model and other closely related models have seen a wide
+ array of applications across the sciences.
+ While these models are powerful, they are notoriously difficult to estimate
+ given a set of empirical observations, without resorting to a number of
+ approximations.
+ Nevertheless, if we succeed in estimating a MRF using any of these methods,
+ the model in itself does not contain a description of the dynamics, limiting
+ us to thermodynamic predictions.
+\end_layout
+
+\begin_layout Standard
+We here introduce a dynamic variant of the MRF (dMRF).
+ The dMRF provides a first approximation of a model which uses multiple
+ localized configurations to describe the dynamics of a molecular system.
+ We present statistical estimators of dMRFs.
+ Next we show how dMRFs can recapitulate macroscopic quantities of Markov
+ state models on well sampled data-sets.
+ In cases where less data is available, we find that the dMRFs allow us
+ to predict system configurations which have not not been explicitly observed
+ during the estimation of the model, yet are consistent with other simulation
+ data held aside for validation.
+ Our results demonstrate that it is possible to learn system-specific rules
+ about how different configurational sub-systems interplay.
+ We anticipate this general approach may greatly reduce the amount of simulation
+ data necessary to generate robust kinetic models of large biomolecular
+ systems.
  
 \end_layout
 
 \begin_layout Section
-Theory
+Results
 \end_layout
 
 \begin_layout Subsection
-Markov models of large systems
-\end_layout
-
-\begin_layout Subsection
-Graphical models
+Dynamic Markov random fields of molecular dynamics
 \end_layout
 
 \begin_layout Standard
@@ -261,37 +341,76 @@ reference "eq:ising"
 \begin_inset Formula $\{h_{i}\}$
 \end_inset
 
- using one of several sampling schemes (Glauber[incl.
- the Gibbs sampler], Roudi & Hertz etc), the inverse problem ie.
+ using one of several sampling schemes 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Glauber1963,Kawasaki1966"
+
+\end_inset
+
+, the inverse problem ie.
  estimating these parameters from equilibrium samples is not straight forward.
  This is a result of the complex dependency of the partition function depends
  on the model parameters.
- In fact, exact inference is intractable for systems with large 
+ In particular, maximum likelihood inference relies on a Boltzmann learning
+ scheme which is only tractable in very limiting situations: small 
 \begin_inset Formula $N$
+\end_inset
+
+ and large data-sets.
+ Similar restrictions apply to the more general MRFs which allow each spin
+ to adopt multiple states.
+ Nevertheless, several approximate methods with attractive asymptotic properties
+ have been proposed 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Ravikumar2010,Roudi2009"
+
 \end_inset
 
 .
- The generalization of this model to multinomial variables (spins) known
- as the Potts model is subject to the same restriction.
- Several approximate methods are available.
-\end_layout
-
-\begin_layout Subsection
-The dynamic Ising model: A tractable model of transition probabilities in
- 
-\begin_inset Formula $N$
-\end_inset
-
- coupled 2-state systems
 \end_layout
 
 \begin_layout Standard
-Solving the inverse Ising problem with equilibrium samples can be difficult,
- without resorting to a number of approximations.
- However, the correspondence between the ergodic dynamics of a system and
- its invariant measure, allows us to solve the problem with respect to the
- dynamics and in turn predict the equilibrium properties.
- To this end, we represent a conditional transition probability 
+In the current setting we do not have access to equilibrium samples from
+ a molecular system, but rather we have a time-series of a molecular system.
+ In other words, we have samples from a conditional distribution 
+\begin_inset Formula $p(\mathbf{s}_{t}\mid\mathbf{s}_{t-\tau})$
+\end_inset
+
+ where 
+\begin_inset Formula $\mathbf{s}_{t}$
+\end_inset
+
+ is a representation of the molecular system at time 
+\begin_inset Formula $t$
+\end_inset
+
+, comprised of 
+\begin_inset Formula $N$
+\end_inset
+
+ sub-systems 
+\begin_inset Formula $s_{t,i}$
+\end_inset
+
+.
+ This conditional probability distribution therefore encodes the dynamics
+ of our molecular system.
+ There is a tight connection between the ergodic dynamics of a system and
+ its (non)equilibrium steady-state distribution.
+ Therefore, if we are able to successfully model the conditional distribution,
+ 
+\begin_inset Formula $p(\mathbf{s}_{t}\mid\mathbf{s}_{t-\tau})$
+\end_inset
+
+, we can make predictions about the steady-state properties – at equilibrium,
+ 
+\begin_inset Formula $p(\mathbf{s)}$
+\end_inset
+
+.
+ Here, we model the conditional transition probability 
 \begin_inset Formula $p(\mathbf{s}_{t}\mid\mathbf{s}_{t-\tau})$
 \end_inset
 
@@ -333,7 +452,7 @@ where
 \begin_inset Formula $\mathbf{J}\in\mathbb{R}^{N\times N}$
 \end_inset
 
- is a – not necessarily symmetric – matrix of coupling parameters and 
+ is a matrix of coupling parameters and 
 \begin_inset Formula $\mathbf{h}$
 \end_inset
 
@@ -342,26 +461,36 @@ where
 \end_inset
 
  is the partition function.
- We note that the elements of 
-\begin_inset Formula $\mathbf{s}_{t}$
+ Unlike in eq.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:ising"
+
 \end_inset
 
- are conditionally independent given 
-\begin_inset Formula $\mathbf{s}_{t-\tau}$
+, the couplings 
+\begin_inset Formula $J_{ij}$
 \end_inset
 
- if 
-\begin_inset Formula $\mathbf{s}$
+ are not necessarily equal to 
+\begin_inset Formula $J_{ji}$
 \end_inset
 
- exerts time-discrete Markovian dynamics.
- Furthermore, we include 'self-coupling' 
+ and the 'self-couplings' (
 \begin_inset Formula $J_{ii}$
 \end_inset
 
- in the transition kernel formulation which control the transition rates
- (discussed further below).
- Using eq.
+) take on finite values.
+ In the case where 
+\begin_inset Formula $\mathbf{J}$
+\end_inset
+
+ is symmetric (
+\begin_inset Formula $J_{ij}=J_{ji})$
+\end_inset
+
+ sampling according to eq.
  
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -369,23 +498,84 @@ reference "eq:Tdensity"
 
 \end_inset
 
- we can see the conditional transition probability of a single spin 
-\begin_inset Formula $i$
+ converges to an equilibrium distribution which is exactly eq.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:ising"
+
 \end_inset
 
- being 
-\begin_inset Formula $1$
+.
+ The 'self-couplings' 
+\begin_inset Formula $J_{ii}$
 \end_inset
 
- at 
+ control the transition rates in each of the sub-systems, 
+\begin_inset Formula $s_{i}$
+\end_inset
+
+ (see SI).
+ Note that eq.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:Tdensity"
+
+\end_inset
+
+ implies that the individual sub-systems at time 
 \begin_inset Formula $t$
 \end_inset
 
- given the configuration of spins at 
+ are conditionally independent given their state at 
 \begin_inset Formula $t-\tau$
 \end_inset
 
-, is sigmoid in 
+: this does not hold for arbitrarily small 
+\begin_inset Formula $\tau$
+\end_inset
+
+, for non- trivial 
+\begin_inset Formula $\mathbf{J}$
+\end_inset
+
+ matrices, as it suggests that all sub-systems are instantaneously uncoupled.
+ However, for a molecular system exerting Markovian dynamics sampled at
+ a finite 
+\begin_inset Formula $\tau$
+\end_inset
+
+ we can anticipate eq.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:Tdensity"
+
+\end_inset
+
+ to provide a reasonable approximation – Indeed, the current model can be
+ understood as a time-discrete version of the Glauber dynamics
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Glauber1963"
+
+\end_inset
+
+ (See SI).
+ If we consider the conditional probability of a single component 
+\begin_inset Formula $s_{t,i}$
+\end_inset
+
+ taking the state 
+\begin_inset Formula $1$
+\end_inset
+
+, given 
+\begin_inset Formula $\mathbf{s}_{t-\tau}$
+\end_inset
+
+ we  see that it is sigmoid in 
 \begin_inset Formula $\theta_{t-\tau,i}=\sum_{j}J_{ij}s_{t-\tau,j}+h_{i}$
 \end_inset
 
@@ -402,17 +592,13 @@ p(s_{t,i}=1\mid\mathbf{s}_{t-\tau}) & = & \frac{\exp[\theta_{t-\tau,i}]}{\exp[\t
 \end_inset
 
 We emphasize that partition function of the transition probabilities is
- analytically tractable, and the spin-states at time 
-\begin_inset Formula $t$
+ analytically tractable.
+ Since the marginal probability distributions of the elements of 
+\begin_inset Formula $\mathbf{s}_{t}$
 \end_inset
 
- are conditionally independent on the spin-states at 
-\begin_inset Formula $t-\tau$
-\end_inset
-
-.
- The latter fact allows us to describe the full transition density as the
- following product,
+ are conditionally independent, the joint probability density is simply
+ their product,
 \end_layout
 
 \begin_layout Standard
@@ -443,8 +629,20 @@ reference "eq:full_tdens"
 \begin_inset Formula $N$
 \end_inset
 
- independent logistic auto-regression problems (Roudi Hertz PRL).
- Given a time-series of spin-configurations, 
+ independent logistic regression problems on a simulation trajectory against
+ itself with a time-lag of 
+\begin_inset Formula $\tau$
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Roudi2011"
+
+\end_inset
+
+.
+ Specifically, given a time-series of state-configurations, 
 \begin_inset Formula $\mathbf{S}=\{\mathbf{s}_{0},\mathbf{s}_{\tau},\dots,\mathbf{s}_{T\tau}\}$
 \end_inset
 
@@ -472,7 +670,139 @@ where we have introduced the indicator function
 
 .
  Efficient algorithms are available to solve this class of problems in regulariz
-ed and unregularized flavors (Defazio et al, NIPS 2014).
+ed and unregularized flavors 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "NIPS2014_5258"
+
+\end_inset
+
+.
+ This dynamic Ising model can readily be generalized to cases where each
+ sub-system can adopt more than two states, 
+\begin_inset Formula $s_{i}$
+\end_inset
+
+.
+ In the supporting information we discuss this more general, model and illustrat
+e that its estimation corresponds to performing 
+\begin_inset Formula $N$
+\end_inset
+
+ independent softmax regression problems on a simulation trajectory against
+ itself with a time-lag of 
+\begin_inset Formula $\tau$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Inference of unbiased couplings from biased data
+\end_layout
+
+\begin_layout Standard
+So far we have described a new dynamical model of which allows us to model
+ a time-discrete evolution of a molecular system using a localized molecular
+ configuration.
+ A model of this kind allows for estimation the coupling between sub-systems
+ 
+\begin_inset Formula $J_{ij}$
+\end_inset
+
+ given a biased data-set, if the sub-system couplings are not a function
+ of the global configuration of the sub-systems.
+ To test this assertion we first consider the one dimensional Ising model.
+ Simulating the Ising model using Glauber dynamics at sub-critical temperatures
+ gives rise to two meta-stable global configurations, with all sub-systems
+ adopting the same configuration.
+ We generate biased and unbiased data sets of the Ising model, by performing
+ several realizations of the Glauber dynamics initialized with all sub-systems
+ initialized in state 
+\begin_inset Formula $-1$
+\end_inset
+
+.
+ In the biased data set, we terminate the simulation if the average magnetizatio
+n becomes larger than 0 – e.g.
+ when more than half of all the sub-systems are in the 
+\begin_inset Formula $1$
+\end_inset
+
+ configuration.
+ The length of the unbiased data-set is adjusted such that it provides an
+ equal statistical sample.
+ 
+\end_layout
+
+\begin_layout Subsection
+Molecular dynamics of a penta-peptide
+\end_layout
+
+\begin_layout Itemize
+Comparison with MSM (statdist and time-scales)
+\end_layout
+
+\begin_layout Itemize
+Show robustness of estimates to data-sparsity vs MSMs (data-efficiency)
+\end_layout
+
+\begin_layout Itemize
+Predictions of unobserved molecular states, systematically better predictions
+ of markov state probabilities in sparse data scenarios 
+\end_layout
+
+\begin_layout Subsection
+Prediction of unobserved meta-stable molecular configurations
+\end_layout
+
+\begin_layout Section
+Discussion
+\end_layout
+
+\begin_layout Standard
+Relationship to Susi and Illias linear model.
+ 
+\end_layout
+
+\begin_layout Paragraph
+Synopsis 
+\end_layout
+
+\begin_layout Standard
+Discovery of meta-stable configurational states of large biomolecules is
+ an important problem in biophysics.
+ We describe a procedure to speed up this discovery process by learning
+ how local structural elements interact and how these interaction influence
+ the temporal behavior of the global configurational states.
+ 
+\end_layout
+
+\begin_layout Acknowledgement
+We thank Fabian Paul, Hao Wu, Christoph Wehmeyer, Illia Horenko and Tim
+ Hempel for stimulating discussion.
+ We thank Nuria Plattner for providing simulation data for the penta-peptide
+ system and DE Shaw Research for providing the simulation data for the villin
+ headpeice.
+ We gratefully acknowledge funding from the the Alexander von Humboldt foundatio
+n (Postdoctoral fellowship to SO) and the European Research Council (ERC
+ Consolidator Grant ScaleCell to FN).
+ 
+\end_layout
+
+\begin_layout Acknowledgement
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "bibliography"
+options "plain"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part*
+Supporting information
 \end_layout
 
 \begin_layout Subsubsection
@@ -484,7 +814,7 @@ Generalization to
 \begin_inset Formula $q$
 \end_inset
 
--state 'spins': dynamic Potts model
+-state 'spins': dynamic Potts model (move to SI?)
 \end_layout
 
 \begin_layout Standard
@@ -505,7 +835,7 @@ exclusive-or
 
 .
  We here achieve this by mapping the output of an exclusive-or operation
- on the two spin throught he linear map, 
+ on the two spin through the linear map, 
 \begin_inset Formula $x:2x-1$
 \end_inset
 
@@ -602,29 +932,7 @@ As for the
 \end_layout
 
 \begin_layout Subsubsection
-Stationary and dynamic properties of the dynamic Ising model.
-\end_layout
-
-\begin_layout Standard
-In cases where 
-\begin_inset Formula $\mathbf{J}$
-\end_inset
-
- is symmetric the dynamics will fulfill detailed balance and the stationary
- distribution will be given by eq.
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:ising"
-
-\end_inset
-
-.
- Write down reversibility proof.
- Not symmetric 
-\begin_inset Formula $\mathbf{J}$
-\end_inset
-
- has non-equilibrium steady state (Roudi Hertz PRL).
+Stationary and dynamic properties of the dynamic Ising model (move to SI?).
 \end_layout
 
 \begin_layout Standard
@@ -727,57 +1035,15 @@ with
 \end_inset
 
  defining the time-scale.
- Point out connection to classic paper by Glauber J Math Phys 1963.
-\end_layout
+ This corresponds to a time-discretized version of the dynamics proposed
+ by Glauber.
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Glauber1963"
 
-\begin_layout Section
-Results
-\end_layout
+\end_inset
 
-\begin_layout Subsection
-Inference of unbiased couplings from biased data
-\end_layout
 
-\begin_layout Itemize
-6-spin 1D Ising model; biased data 
-\end_layout
-
-\begin_layout Subsection
-Molecular dynamics of a penta-peptide
-\end_layout
-
-\begin_layout Itemize
-Comparison with MSM (statdist and time-scales)
-\end_layout
-
-\begin_layout Itemize
-Show robustness of estimates to data-sparsity vs MSMs (data-efficiency)
-\end_layout
-
-\begin_layout Itemize
-Predictions of unobserved molecular states
-\end_layout
-
-\begin_layout Subsection
-Prediction of unobserved meta-stable molecular configurations
-\end_layout
-
-\begin_layout Section
-Discussion
-\end_layout
-
-\begin_layout Standard
-Relationship to Susi and Illias linear model.
- 
-\end_layout
-
-\begin_layout Acknowledgments
-We thank Fabian Paul, Hao Wu, Christoph Wehmeyer and Tim Hempel for stimulating
- discussion.
- We gratefully acknowledge funding from the the Alexander von Humboldt foundatio
-n (Postdoctoral fellowship to SO) and the European Research Council (ERC
- Consolidator Grant ScaleCell to FN).
- 
 \end_layout
 
 \end_body
