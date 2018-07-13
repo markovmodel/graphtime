@@ -96,9 +96,7 @@
 \begin_body
 
 \begin_layout Title
-Alt 1: Graphical Models of Molecular Kinetics.
- Alt 2: Molecular kinetics through a coupling model of localized molecular
- representations
+Graphical Models of Molecular Kinetics 
 \end_layout
 
 \begin_layout Author
@@ -198,14 +196,15 @@ s thus rapidly becomes intractable.
 In this paper, we propose an alternative approach to obtaining statistical
  models of molecular kinetics.
  The strategy presented here distinguishes itself compared to the methods
- discussed above by the way the molecular configuration is represented.
- We depart from global and mutually exclusive configurational states.
- Instead we consider a configurational state as a combination several locally
- defined sub-states configurations, for example a rotameric state of a torsion
- angle.
+ discussed above by the way the molecular configurations are represented.
+ We depart from global and mutually exclusive configurational states, instead
+ we consider a configurational state as a concatenation of several locally
+ defined sub-system configurations.
+ A sub-system could be a torsion angle and a state of this sub-system a
+ rotameric configuration.
  With this representation we construct a probabilistic model which gives
  us a distribution over all the sub-system configurations at a time, given
- their configuration at a previous time.
+ their configuration at previous times.
  A simple example of such a model is a set of independent Markovian models
  which describe localized conformational changes.
  This example assumes statistical independence of the dynamics of the different
@@ -225,18 +224,18 @@ A simple statistical model which allows us to model the interactions between
 \begin_inset Formula $N$
 \end_inset
 
- particles on a lattice, each of which adopt one of two configurations,
+ sub-systems on a lattice, each of which adopt one of two configurations,
  
-\begin_inset Formula $\uparrow$
+\begin_inset Formula $1$
 \end_inset
 
  or 
-\begin_inset Formula $\downarrow$
+\begin_inset Formula $-1$
 \end_inset
 
 .
- Each particle interacts directly only with its nearest neighbors, and possibly
- an external field.
+ Each sub-system interacts directly only with its nearest neighbors, and
+ possibly an external field.
  Although all interactions in the Ising model are local, complicated non-local
  phenomena arise.
  Indeed, the Ising model and other closely related models have seen a wide
@@ -250,7 +249,7 @@ A simple statistical model which allows us to model the interactions between
 \end_layout
 
 \begin_layout Standard
-We here introduce a dynamic variant of the MRF (dMRF).
+We here introduce the dynamic MRF (dMRF).
  The dMRF provides a first approximation of a model which uses multiple
  localized configurations to describe the dynamics of a molecular system.
  We present statistical estimators of dMRFs.
@@ -286,7 +285,7 @@ The Ising model is a simple Hamiltonian model expressing the stationary
 \begin_inset Formula $\{-1,1\}$
 \end_inset
 
--spins 
+-sub-systems 
 \begin_inset Formula $\mathbf{s}$
 \end_inset
 
@@ -313,7 +312,7 @@ where the (unit-less) model parameters
 \begin_inset Formula $h_{i}$
 \end_inset
 
- describe the coupling strength between spins 
+ describe the coupling strength between sub-systems 
 \begin_inset Formula $i$
 \end_inset
 
@@ -353,7 +352,8 @@ key "Glauber1963,Kawasaki1966"
  This is a result of the complex dependency of the partition function depends
  on the model parameters.
  In particular, maximum likelihood inference relies on a Boltzmann learning
- scheme which is only tractable in very limiting situations: small 
+ scheme which is only tractable/accurate in very limiting situations: small
+ 
 \begin_inset Formula $N$
 \end_inset
 
@@ -369,6 +369,59 @@ key "Ravikumar2010,Roudi2009"
 \end_inset
 
 .
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/fig0.pdf
+	width 100col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Illustrative comparison of molecular representations in Markov state models
+ and dynamic Markov random fields.
+ Markov state models represent molecular configurations as global discrete
+ states (green rounded boxes) whereas dynamic Markov random fields represent
+ molecular configurations as a concatenation of several local molecular
+ configurations (white circles).
+ The transition probabilities of in between global configurations 
+\begin_inset Formula $i$
+\end_inset
+
+and 
+\begin_inset Formula $j$
+\end_inset
+
+ are encoded in a single value 
+\begin_inset Formula $T_{ij}$
+\end_inset
+
+ in MSMs.
+ In dMRFs the transition probabilities are encoded as coupling between locally
+ defined structural elements.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -684,8 +737,8 @@ key "NIPS2014_5258"
 \end_inset
 
 .
- In the supporting information we discuss this more general, model and illustrat
-e that its estimation corresponds to performing 
+ In the supporting information we discuss this more general model and illustrate
+ that its estimation corresponds to performing 
 \begin_inset Formula $N$
 \end_inset
 
@@ -716,23 +769,172 @@ So far we have described a new dynamical model of which allows us to model
  Simulating the Ising model using Glauber dynamics at sub-critical temperatures
  gives rise to two meta-stable global configurations, with all sub-systems
  adopting the same configuration.
- We generate biased and unbiased data sets of the Ising model, by performing
- several realizations of the Glauber dynamics initialized with all sub-systems
- initialized in state 
+ 
+\end_layout
+
+\begin_layout Standard
+We generate non-equilibrium (NED) and equilibrium (ED) data sets of the
+ Ising model, by performing several realizations of the Glauber dynamics
+ initialized with all sub-systems initialized in state 
 \begin_inset Formula $-1$
 \end_inset
 
 .
- In the biased data set, we terminate the simulation if the average magnetizatio
-n becomes larger than 0 – e.g.
+ In the NED, we terminate the simulation if the average magnetization becomes
+ larger than 0 – e.g.
  when more than half of all the sub-systems are in the 
 \begin_inset Formula $1$
 \end_inset
 
  configuration.
- The length of the unbiased data-set is adjusted such that it provides an
- equal statistical sample.
+ Consequently, several global configurational states have been observed
+ in the data set, among these one of the meta-stable states.
+ The length of the ED is adjusted such that it provides an equal statistical
+ sample (Fig 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Ising"
+
+\end_inset
+
+A).
+ Using a regularized maximum likelihood scheme we use the NED and ED data
+ sets to estimate two models: NED dMRF and ED MRF respectively, along with
+ a MSM of the NED.
+ We find that dMRFs estimated using the NED and ED data-sets converge to
+ the same sub-system couplings (Fig 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Ising"
+
+\end_inset
+
+B) regardless of whether we chose to estimate the external field parameters,
  
+\begin_inset Formula $h_{i}$
+\end_inset
+
+, or not, impling consistent global state distributions are estimated (Fig
+ S1).
+ 
+\end_layout
+
+\begin_layout Standard
+With the estimated models we can now reconstruct global MSMs by enumerating
+ all possible global transitions (
+\begin_inset Formula $T_{ij}$
+\end_inset
+
+) of the system.
+ We can use these MSMs to directly compare the stationary (thermodynamic)
+ and dynamic properties of our estimated model against a 'true' analytical
+ MSM reference used to generate the data.
+ Remarkably, we find the distribution of the average system magnetizations,
+ 
+\begin_inset Formula $\langle M\rangle$
+\end_inset
+
+, of the estimated models closely resemble the reference distribution (Fig
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Ising"
+
+\end_inset
+
+C).
+ Conversely, a MSM estimated using the NED, fails to capture global configuratio
+ns which have not been directly observed in the training data (Fig 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Ising"
+
+\end_inset
+
+C).
+ Similarly, direct comparison of global transition probabilities, 
+\begin_inset Formula $T_{ij}$
+\end_inset
+
+, predicted from the dMRF which correlate well with their true reference
+ values, albeit with some biases (Fig 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Ising"
+
+\end_inset
+
+D).
+ Finally, the true global relaxation time-scales are recapitulated well
+ by the dMRF models (Fig 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Ising"
+
+\end_inset
+
+E) – however, for the NED dMRF the time-scales are systematically slowed,
+ as the self-couplings are over-estimated (Fig 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Ising"
+
+\end_inset
+
+B).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/fig1.png
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Inference of model parameters for a 1-dimensional 9 spin Ising model.
+ A) Visualization of equilibrium and non-equilibrium data sets used to generate
+ model.
+ B) Comparison of coupling parameters estimated using equilibrium and non-equili
+brium data sets.
+ C) Analytic stationary distributions of 
+\begin_inset Formula $\langle M\rangle$
+\end_inset
+
+ and empirical histograms of equilibrium and non-equilibrium data sets.
+ D) Comparison of global configuraitonal state transition probabilities
+ predicted in dMRF trained on non-equilibrium data set agains the true reference.
+ E) Implied time-scales of estimated model and the true reference.
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Ising"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -756,8 +958,57 @@ Predictions of unobserved molecular states, systematically better predictions
 Prediction of unobserved meta-stable molecular configurations
 \end_layout
 
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/Villin_metastable_errs_acf.pdf
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Prediction of macroscopic stationary and dynamic properties of the villin
+ headpiece with dMRFs.
+ A) Meta-stable state distributions sampled by dMRFs estimated leaving data
+ from one of five meta-stable state out during estimation and using the
+ full data set (hatched).
+ Reference distribution estimated using a hidden Markov model (HMM) estimated
+ with the full MD data-set (orange).
+ B) Histograms of reconstruction errors of atomistic models from sub-system
+ encoded trajectories sampled by dMRFs.
+ C) Auto-correlation function of the rotameric state of the 
+\begin_inset Formula $\phi$
+\end_inset
+
+ torsion of Lys 71 in differt dMRF models and the simulation data.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
-Discussion
+Conclusions
 \end_layout
 
 \begin_layout Standard
@@ -780,10 +1031,10 @@ Discovery of meta-stable configurational states of large biomolecules is
 
 \begin_layout Acknowledgement
 We thank Fabian Paul, Hao Wu, Christoph Wehmeyer, Illia Horenko and Tim
- Hempel for stimulating discussion.
+ Hempel for stimulating discussions.
  We thank Nuria Plattner for providing simulation data for the penta-peptide
  system and DE Shaw Research for providing the simulation data for the villin
- headpeice.
+ headpiece.
  We gratefully acknowledge funding from the the Alexander von Humboldt foundatio
 n (Postdoctoral fellowship to SO) and the European Research Council (ERC
  Consolidator Grant ScaleCell to FN).
@@ -805,16 +1056,16 @@ options "plain"
 Supporting information
 \end_layout
 
+\begin_layout Section*
+Methods
+\end_layout
+
 \begin_layout Subsubsection
-Generalization to 
-\begin_inset Formula $N$
+Dynamic Markov random fields with 
+\begin_inset Formula $Q_{i}$
 \end_inset
 
- coupled 
-\begin_inset Formula $q$
-\end_inset
-
--state 'spins': dynamic Potts model (move to SI?)
+ sub-system configurations
 \end_layout
 
 \begin_layout Standard
@@ -932,7 +1183,7 @@ As for the
 \end_layout
 
 \begin_layout Subsubsection
-Stationary and dynamic properties of the dynamic Ising model (move to SI?).
+Stationary and dynamic properties of dMRFs
 \end_layout
 
 \begin_layout Standard
@@ -1044,6 +1295,105 @@ key "Glauber1963"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Section
+supporting figures
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/FigS1.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/tica_leave_one_out.pdf
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/feature_scatter.pdf
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Supporting GIFs 
 \end_layout
 
 \end_body
