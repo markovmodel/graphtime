@@ -98,4 +98,4 @@ def estimate_potts(strajs, lag = 1, stride = 1, fit_bias = False, regularizer = 
     return params_potts, intercepts_potts, Encoder, active_subsystems
 
 
-def estimate_dynamic_MRF()
+#def estimate_dynamic_MRF()
