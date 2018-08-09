@@ -177,14 +177,28 @@ key "Bowman_JCP09_Villin,BowmanPandeNoe_MSMBook,Olsson2017b"
 
 \begin_layout Standard
 MSMs and related Master equation-based models describe the transition probabilit
-ies between mutually exclusive segments of configuration space.
+ies between mutually exclusive segments of configuration space 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Prinz2011,Husic2018"
+
+\end_inset
+
+.
  Given all relevant configurational transitions have been sampled, these
  models can be estimated and thereby provide optimal discrete approximations
  of the transfer operator, 
 \begin_inset Formula $\mathcal{T}$
 \end_inset
 
-, governing a systems molecular dynamics.
+, governing a systems molecular dynamics 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "No2013,Nske2014"
+
+\end_inset
+
+.
  However, given a fixed finite time-resolution, 
 \begin_inset Formula $\tau$
 \end_inset
@@ -227,8 +241,8 @@ A sub-system can, for instance, be a torsion angle with several rotameric
  which describe localized conformational changes: rotamer jumps or contact
  formation/breaking.
  This example assumes statistical independence of the dynamics of the different
- conformational states which is violated in many practical cases, for example
- the rotameric states of tightly packed side-chains in the hydrophobic core
+ sub-systems which is violated in many practical cases, for example the
+ rotameric states of tightly packed side-chains in the hydrophobic core
  of a protein.
  To account for statistical dependencies between the sub-systems defined
  we will need to explicitly model the interaction between the sub-systems.
@@ -237,7 +251,14 @@ A sub-system can, for instance, be a torsion angle with several rotameric
 
 \begin_layout Standard
 Markov random fields (MRF) is a class of statistical models which allows
- us to model the interactions between multiple discrete statistical variables.
+ us to model the interactions between multiple discrete statistical variables
+\begin_inset CommandInset citation
+LatexCommand cite
+key "BishopsBook"
+
+\end_inset
+
+.
  A well-known example of a MRF is the Ising model from statistical physics:
  a model of 
 \begin_inset Formula $N$
@@ -252,6 +273,13 @@ Markov random fields (MRF) is a class of statistical models which allows
 \begin_inset Formula $-1$
 \end_inset
 
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Lenz1920"
+
+\end_inset
+
 .
  Each sub-system interacts directly only with its nearest neighbors, and
  possibly an external field.
@@ -261,7 +289,14 @@ Markov random fields (MRF) is a class of statistical models which allows
  array of applications across the sciences.
  While these models are powerful, they are notoriously difficult to estimate
  given a set of empirical observations, without resorting to a number of
- approximations.
+ approximations 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Ravikumar2010,Parise2006"
+
+\end_inset
+
+.
  Nevertheless, even if we succeed in estimating a MRF using any of these
  methods, the model in itself does not contain a description of the dynamics,
  limiting us to thermodynamic predictions.
@@ -389,7 +424,7 @@ key "Glauber1963,Kawasaki1966"
 
  and large numbers of independently and identically drawn samples.
  Similar restrictions apply to the more general MRFs which allow each sub-system
- to adopt multiple .
+ to adopt multiple configurations.
  Nevertheless, several approximate methods with attractive asymptotic properties
  have been proposed 
 \begin_inset CommandInset citation
@@ -455,8 +490,9 @@ and
 \end_layout
 
 \begin_layout Standard
-In the current setting we do not have access to equilibrium samples from
- a molecular system, but rather we have a time-series of a molecular system.
+In the context of molecular simulations and kinetics our data does not consitute
+ independently and identically drawn samples from a configurational equilibrium
+ distribution, rather we have a time-series of a molecular system.
  In other words, we have samples from a conditional distribution 
 \begin_inset Formula $p(\mathbf{s}_{t}\mid\mathbf{s}_{t-\tau})$
 \end_inset
@@ -659,54 +695,6 @@ spin-flip
 \end_layout
 
 \begin_layout Standard
-Note that eq.
- 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:Tdensity"
-
-\end_inset
-
- implies that the individual sub-systems at time 
-\begin_inset Formula $t$
-\end_inset
-
- are conditionally independent given their state at 
-\begin_inset Formula $t-\tau$
-\end_inset
-
-: this does not hold for some arbitrary 
-\begin_inset Formula $\tau$
-\end_inset
-
-, for non- trivial 
-\begin_inset Formula $\mathbf{J}$
-\end_inset
-
- matrices, as it suggests that all sub-systems are instantaneously uncoupled.
- Simultaneously, in order for this to be a good approximation we need to
- keep 
-\begin_inset Formula $\tau$
-\end_inset
-
- short compared to the time-scale of sub-system state transition.
- However, for a molecular system exerting Markovian dynamics sampled at
- a finite 
-\begin_inset Formula $\tau$
-\end_inset
-
- the subsystem couplings in eq.
- 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:Tdensity"
-
-\end_inset
-
- will be non-zero.
-\end_layout
-
-\begin_layout Standard
 If we consider the conditional probability of a single sub-system 
 \begin_inset Formula $s_{t,i}$
 \end_inset
@@ -813,42 +801,6 @@ key "Roudi2011"
 \end_inset
 
 .
- Specifically, given a time-series of state-configurations, 
-\begin_inset Formula $\mathbf{S}=\{\mathbf{s}_{0},\mathbf{s}_{\tau},\dots,\mathbf{s}_{T\tau}\}$
-\end_inset
-
-, the likelihood function of the couplings and fields is given by,
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{eqnarray*}
-\ell(\mathbf{J,\mathbf{h}\mid\mathbf{S}}) & = & \prod_{t=\tau}^{\tau(T-1)}\prod_{i=1}^{N}p(s_{t,i}=1\mid\mathbf{s}_{t-\tau})^{\mathcal{I}_{1}(s_{t,i})}p(s_{t,i}=-1\mid\mathbf{s}_{t-\tau}))^{\mathcal{I}_{-1}(s_{t,i})}
-\end{eqnarray*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-where we have introduced the indicator function 
-\begin_inset Formula $\mathcal{I}_{k}(x)=\begin{cases}
-1 & \text{if }x=k\\
-0 & \text{else}
-\end{cases}$
-\end_inset
-
-.
- Efficient algorithms are available to solve this class of problems in regulariz
-ed and unregularized flavors 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "NIPS2014_5258"
-
-\end_inset
-
-.
  Throughout this paper, we use a LASSO/
 \begin_inset Formula $L_{1}$
 \end_inset
@@ -865,7 +817,7 @@ a posteriori
 \begin_inset Formula $0$
 \end_inset
 
-.
+ (Supporting information).
 \end_layout
 
 \begin_layout Standard
@@ -885,7 +837,7 @@ This dynamic Ising model can readily be generalized to cases where each
 \begin_inset Formula $\tau$
 \end_inset
 
-.
+ (Supporting information).
 \end_layout
 
 \begin_layout Subsection
@@ -952,18 +904,20 @@ B) regardless of whether we choose to estimate the external field parameters,
 \begin_inset Formula $h_{i}$
 \end_inset
 
-, or not, impling consistent global state distributions are estimated (Fig
- S1).
+, or not (Fig S1).
+ This means that the unbiased sub-system couplings can be recovered from
+ a biased data-set, in turn suggesting that global state distributions can
+ be estimated from biased data.
  
 \end_layout
 
 \begin_layout Standard
-With the estimated models we can now reconstruct global MSMs by enumerating
- all possible global transitions 
+With the estimated models we reconstruct global MSMs by enumerating all
+ possible global transitions 
 \begin_inset Formula $i\rightarrow j$
 \end_inset
 
- of the system and computing their transition probabilities, 
+ of the system and compute their transition probabilities, 
 \begin_inset Formula $T_{ij}$
 \end_inset
 
@@ -976,9 +930,9 @@ reference "eq:full_tdens"
 \end_inset
 
 .
- We can use these MSMs to directly compare the stationary (thermodynamic)
- and dynamic properties of our estimated model against a 'true' analytical
- MSM reference used to generate the data.
+ We use these MSMs to directly compare the stationary (thermodynamic) and
+ dynamic properties of our estimated model against a 'true' analytical MSM
+ reference used to generate the data.
  Remarkably, we find the distribution of the net system magnetizations,
  
 \begin_inset Formula $\langle M\rangle$
@@ -1053,8 +1007,8 @@ status open
 
 \begin_layout Plain Layout
 Inference of model parameters for a 1-dimensional 9 spin Ising model.
- A) Visualization of equilibrium and non-equilibrium data sets used to generate
- model.
+ A) Visualization of equilibrium and non-equilibrium data sets used to estimate
+ dMRFs.
  B) Comparison of coupling parameters estimated using equilibrium and non-equili
 brium data sets.
  C) Analytic stationary distributions of 
@@ -1091,7 +1045,103 @@ dMRFs as models of molecular dynamics: comparison to MSMs
 \end_layout
 
 \begin_layout Standard
-Markov state models are a popular means to 
+Above we show that estimated dMRFs can predict important meta-stable configurati
+ons which have not been observed during training.
+ However, for the example above, we have an optimal encoding of the sub-systems
+ (the spins) with truly Markovian dynamics – for molecular systems this
+ is not the case.
+ We used molecular dynamics simulation data of a small penta-peptide system
+ (WLALL) to test whether dMRFs could be a viable scheme for modelling molecular
+ kinetics.
+ This system is sufficently small to enable detailed microscopic analysis
+ with MSMs while exerting meta-stability.
+\end_layout
+
+\begin_layout Standard
+We encode the back-bone torsions (
+\begin_inset Formula $\phi$
+\end_inset
+
+,
+\begin_inset Formula $\psi$
+\end_inset
+
+) of WLALL into 8 sub-systems, each of which has 2 states, corresponding
+ to different rotameric basins in the Ramachandran plane (Methods).
+ We estimate MSMs and dMRFs using this representation, however, for the
+ MSMs we enumerate all the possible (
+\begin_inset Formula $2^{8}$
+\end_inset
+
+) global configurations of the sub-systems as independent Markov states.
+ By enumerating all possible sub-system transitions the dMRFs can be used
+ to reconstruct a MSM whose properties can be compared directly to the directly
+ estimated MSM.
+ We find that the implied time-scales computed from dMRFs match those of
+ the MSMs well at multiple lag-times (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:pentapep"
+
+\end_inset
+
+A).
+ Similarly, the stationary probabilities of the Markov states match closely,
+ in particular for high probability states (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:pentapep"
+
+\end_inset
+
+B).
+\end_layout
+
+\begin_layout Standard
+As opposed to MSMs, dMRFs yield a transition probability for all possible
+ sub-system configurations, whereas MSMs only provide information about
+ directly observed transitions – similarly, dMRFs (here, 
+\begin_inset Formula $N_{\mathrm{dMRF}}=8^{2}+8$
+\end_inset
+
+) are parametrically more compact compared to MSMs (here, 
+\begin_inset Formula $N_{\mathrm{MSM}}=2^{16}$
+\end_inset
+
+).
+ Intuitively, we would anticipate the smaller number of parameters enable
+ more precise estimation of parameters with less data, effectively meaning
+ that dMRFs are more data-efficient that MSMs.
+ The smaller error-bars on the dMRF implied time-scales suggest that this
+ may be the case (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:pentapep"
+
+\end_inset
+
+B).
+ However, to more quantitatively compare the data-efficiency of MSMs and
+ dMRFs we estimated multiple dMRFs and MSMs with increasing volumes of molecular
+ dynamics data.
+ Using the estimated models we compute the stationary probabilities of Markov
+ states visited in all trajectories (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:pentapep"
+
+\end_inset
+
+C).
+ We find the predicted stationary probabilities converge at lower data-volumes
+ for dMRFs compared to MSMs in particular for low-probability states.
+ However, since there is a discrepancy between the predicted stationary
+ probabilities for the low probability states and we do not have an exhaustive
+ data-set at hand, we cannot gauge which of the predictions are more accurate.
 \end_layout
 
 \begin_layout Standard
@@ -1148,9 +1198,26 @@ Above we saw how the dMRF framework can recapitulate the dynamics of MSMs,
  and provide predictions of stationary probabilities of unobserved global
  configurations.
  To more systematically test the predictive power of dMRFs in predicting
- unobserved meta-stable configurations not observed during simulation we
- estimated several dMRFs which we designed to be selectively blind towards
- a particular meta-stable state.
+ meta-stable configurations not observed during simulation we estimated
+ several dMRFs which we designed to be selectively blind towards a particular
+ meta-stable state.
+ We use previously published simulation data of two fast-folding proteins,
+ villin and BBA
+\begin_inset CommandInset citation
+LatexCommand cite
+key "LindorffLarsen2011"
+
+\end_inset
+
+, an all 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ and 
+\begin_inset Formula $\alpha/\beta$
+\end_inset
+
+ folds respectively, to test this.
  
 \end_layout
 
@@ -1283,12 +1350,210 @@ name "fig:Prediction-of-macroscopic"
 Same plots as above for BBA
 \end_layout
 
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/statdist_err_acf_bba.pdf
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Prediction of macroscopic stationary and dynamic properties of BBA with
+ dMRFs.
+ A) Meta-stable state distributions sampled by dMRFs estimated leaving data
+ from one of four meta-stable state out during estimation and using the
+ full data set (hatched).
+ Reference distribution estimated using a hidden Markov model (HMM) estimated
+ with the full MD data-set (orange).
+ B) Histograms of reconstruction errors of atomistic models from sub-system
+ encoded trajectories sampled by dMRFs (Hamming distance).
+ C) Auto-correlation function of the rotameric state of the 
+\begin_inset Formula $\phi$
+\end_inset
+
+ torsion of Lys 71 in the dMRF models and the simulation data.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Prediction-of-macroscopic-1"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
-Conclusions
+Discussion and Conclusions
 \end_layout
 
 \begin_layout Standard
-Relationship to Susi and Illias linear model.
+In this paper we introduce dynamic Markov random fields (dMRFs) and in particula
+r their use to model molecular kinetics.
+ The general approach encodes molecular conformations into multiple discrete
+ sub-systems, and the global configurational state is thereby represented
+ by a concatenation of several discrete variables.
+ Using this representation the dMRF approach identifies the probability
+ distribution of all of the sub-systems at a time 
+\begin_inset Formula $\tau$
+\end_inset
+
+ in the future given their current configuration.
+ 
+\end_layout
+
+\begin_layout Standard
+In general, we find the dMRFs, in spite of their compact parametric form
+ can approximate well the dynamic behavior of several molecular systems.
+ When gauged against MSMs, dMRFs predict similar characteristic time-scales
+ and stationary distributions.
+ Beyond the capabilities of MSMs, dMRF also allow for the prediction of
+ transitions to and from unobserved molecular conformations and their stationary
+ probabilities.
+ Specifically, we found that dMRFs can predict the predict the prescence
+ of meta-stable configurations which have not been observed during model
+ estimation, although their absolute probabilities are not always accurately
+ captured.
+ 
+\end_layout
+
+\begin_layout Standard
+With the change in representation necessary to use dMRF come new technical
+ challenges and limitations.
+ First, identifying important sub-systems and how these should be encoded
+ is not trivial.
+ Specfically, we currently do not have a governing principle to gauge different
+ sub-system encodings against each other 
+\emph on
+a priori
+\emph default
+.
+ Similarly, going from an encoded representation back to a molecular configurati
+on (decoding) is generally a difficult problem.
+ Second, although efficient regularized maximum likelihood estimators are
+ readily available, optimally chosing regularization factors remains difficult.
+ Third, the compact parametric form comes with limited expressive power.
+ It is specifically assumed that the sub-system couplings are 
+\emph on
+not
+\emph default
+ a function of the global configuration – if this is violated we cannot
+ expect to obtain quantitatively predictive models using dMRFs.
+ Finally, unlike for MSMs 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Olsson2017b"
+
+\end_inset
+
+ the integration of experimental data into the estimation of dMRFs is currently
+ not possible.
+ Similarly prediction of experimental observables will, unlike for MSMs
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Noe2011,Olsson2017"
+
+\end_inset
+
+, involve sampling dMRFs which could be both time-consuming and difficult,
+ in particular when no sub-system decoding is possible.
+\end_layout
+
+\begin_layout Standard
+Machine learning, and in particular deep learning, have seen a surge in
+ interest in the sciences the past few years, including in the context of
+ molecular kinetics 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Mardt2018,1805.07601"
+
+\end_inset
+
+.
+ A hallmark of deep learning is its ability to learn complicated non-linear
+ functions which fulfill a pre-specified set of criteria and sufficient
+ available data
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Goodfellow-et-al-2016"
+
+\end_inset
+
+.
+ The identification of sub-systems and their discretization is highly non-linear
+ and akin to the featurization, projection and discretization process whose
+ success critically determines the success of Markov state modelling .
+ The VAMPnets approach recent described illustrated how this the featurization,
+ projection and discretization pipeline of MSM building could be replaced
+ by a deep neutral network
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Mardt2018"
+
+\end_inset
+
+.
+ We envision that a related approach can be taken in the context of identifying
+ sub-systems in molecular systems for dMRFs and thereby possibly side-step
+ this currently cumbersome and manual process.
+ 
+\end_layout
+
+\begin_layout Standard
+Gerber and Horenko recently described a linear probabilistic model which
+ aims to predict the time-evolution of several binary random variables.
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Gerber2014"
+
+\end_inset
+
+ Their method is motivated as a causal model, i.e.
+ the current rotameric configurations causally encodes a probability density
+ of rotameric states at a future time.
+ Effectively the their approach is closely related to the dMRFs: the linear
+ causality is generally implemented as a constrained linear regression problem
+ with a time-lag, whereas the dMRFs can be estimated by an unconstrained
+ logistic/softmax regression problem.
+ The linear causality model sports many of the same advantages as the dMRFs,
+ yet their practical implementation is more ambiguous and generally less
+ practial, compared to dMRFs.
+\end_layout
+
+\begin_layout Standard
+We anticipate the use of dMRFs or related methods can be broadly applied
+ in biophysics.
+ The compact parametric form allows us to model molecular systems which
+ are significantly larger than what would be tractable using for example
+ MSMs.
+ Furthermore, a sparse sub-system coupling matrix 
+\begin_inset Formula $\mathbf{J}$
+\end_inset
+
+ could enable a spatial decomposition or large molecular systems into conditiona
+lly independent fragments, more amenable for simulation.
+ The ability of dMRFs to predict unobserved global configuration could futher
+ be used to in an adaptive simulation setting, where previously unobserved
+ states are reconstructed and used to seed new molecular simulations.
  
 \end_layout
 
@@ -1356,10 +1621,6 @@ options "plain"
 Supporting information
 \end_layout
 
-\begin_layout Section*
-Methods
-\end_layout
-
 \begin_layout Section
 Theory and numerical results
 \end_layout
@@ -1422,7 +1683,16 @@ p(\mathbf{s}_{t}\mid\mathbf{s}_{t-\tau}) & = & \mathcal{Z}^{-1}\exp[\sum_{i}^{N}
 \end_layout
 
 \begin_layout Standard
-We see that the transition density factors into two mutually exclusive parts.
+where we have introduced the indicator function 
+\begin_inset Formula $\mathcal{I}_{k}(x)=\begin{cases}
+1 & \text{if }x=k\\
+0 & \text{else}
+\end{cases}$
+\end_inset
+
+.
+ We see that the transition density factors into two mutually exclusive
+ parts.
  Let us consider first the binary case (
 \begin_inset Formula $q=2$
 \end_inset
@@ -1468,9 +1738,9 @@ As for the
 
 \begin_layout Standard
 \begin_inset Formula 
-\[
-p(\mathbf{s}_{t}\mid\mathbf{s}_{t-\tau})=\prod_{i=1}^{N}\frac{\exp[h_{i}^{s_{t,i}(q)}+\sum_{j}^{N}\sum_{k}^{q-1}J_{i,j}^{s_{t,i}(q),k}-2J_{i,j}^{s_{t,i}(q),k}\mathcal{I}_{k}(s_{t-\tau,j})]}{1+\sum_{m}^{q-1}\exp[h_{i}^{m}+\sum_{j}^{N}\sum_{k}^{q-1}J_{i,j}^{m,k}-2J_{i,j}^{m,k}\mathcal{I}_{k}(s_{t-\tau,j})]},
-\]
+\begin{equation}
+p(\mathbf{s}_{t}\mid\mathbf{s}_{t-\tau})=\prod_{i=1}^{N}\frac{\exp[h_{i}^{s_{t,i}}+\sum_{j}^{N}\sum_{k}^{q-1}J_{i,j}^{s_{t,i},k}-2J_{i,j}^{s_{t,i},k}\mathcal{I}_{k}(s_{t-\tau,j})]}{1+\sum_{m}^{q-1}\exp[h_{i}^{m}+\sum_{j}^{N}\sum_{k}^{q-1}J_{i,j}^{m,k}-2J_{i,j}^{m,k}\mathcal{I}_{k}(s_{t-\tau,j})]},\label{eq:dmrf_tdens}
+\end{equation}
 
 \end_inset
 
@@ -1479,7 +1749,7 @@ p(\mathbf{s}_{t}\mid\mathbf{s}_{t-\tau})=\prod_{i=1}^{N}\frac{\exp[h_{i}^{s_{t,i
 
 \begin_layout Standard
 where 
-\begin_inset Formula $s_{t,i}(q)$
+\begin_inset Formula $s_{t,i}$
 \end_inset
 
  indicates the configuration of sub-system 
@@ -1516,6 +1786,107 @@ Maximum likelihood estimation of
  of logistic regression.
  There are, similarly, efficient schemes available to solve problems of
  this type.
+\end_layout
+
+\begin_layout Subsection
+Maximum Likelihood estimation of dMRFs
+\end_layout
+
+\begin_layout Standard
+Given a time-series of state-configurations, 
+\begin_inset Formula $\mathbf{S}=\{\mathbf{s}_{0},\mathbf{s}_{\tau},\dots,\mathbf{s}_{T\tau}\}$
+\end_inset
+
+, the likelihood function of the couplings and fields is given by,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray}
+\ell(\mathbf{J,\mathbf{h}\mid\mathbf{S}}) & = & \prod_{t=\tau}^{\tau(T-1)}p(\mathbf{s}_{t,i}\mid\mathbf{s}_{t-\tau}),\label{eq:likelihood}
+\end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $p(\mathbf{s}_{t,i}\mid\mathbf{s}_{t-\tau})$
+\end_inset
+
+ is (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:dmrf_tdens"
+
+\end_inset
+
+).
+ Similarly, we can write down an a posteriori functional with a Laplacian
+ prior, 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray}
+\mathcal{P}(\mathbf{J},\mathbf{h}\mid\mathbf{S)} & = & \left(\prod_{i,j}\frac{\gamma}{2}\exp(-\gamma\left|J_{ij}\right|)\right)\ell(\mathbf{J,\mathbf{h}\mid\mathbf{S}}),\label{eq:posterior}
+\end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+which corresponds to a 
+\begin_inset Formula $L_{1}$
+\end_inset
+
+ regularized likelihood with a regularizer 
+\begin_inset Formula $\gamma$
+\end_inset
+
+.
+ Maximization of (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:likelihood"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:posterior"
+
+\end_inset
+
+) can be done using naive gradient ascent, however, this strategy proved
+ computationally inefficient.
+ Throughout this paper, we use the SAGA optimization algorithm 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "NIPS2014_5258"
+
+\end_inset
+
+, as implemented in the scikit-learn python library
+\begin_inset CommandInset citation
+LatexCommand cite
+key "scikit-learn"
+
+\end_inset
+
+, to optimize (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:posterior"
+
+\end_inset
+
+).
 \end_layout
 
 \begin_layout Subsection
@@ -1922,6 +2293,186 @@ stic time-scales.
  steps each) of the 9 spin Ising model.
 \end_layout
 
+\begin_layout Section*
+Methods
+\end_layout
+
+\begin_layout Subsection
+dMRF analysis of 1D Ising model with Glauber dynamics
+\end_layout
+
+\begin_layout Standard
+A reference MSM describing Glauber dynamics of a 9 spin 1D Ising model was
+ constructed by discretization of the master equation in ref.
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Glauber1963"
+
+\end_inset
+
+, with 
+\begin_inset Formula $\gamma=\tanh(2J_{ij})=0.95$
+\end_inset
+
+ and flip-rate 
+\begin_inset Formula $\alpha=0.1\,\mathrm{step}^{-1}$
+\end_inset
+
+.
+ The MSM encoded the transition probabilities between the 
+\begin_inset Formula $512$
+\end_inset
+
+ global Markov states of the 9 spin Ising model in a 
+\begin_inset Formula $512\times512$
+\end_inset
+
+ transition matrix.
+ We generated two data-sets using this MSM.
+ The first data set emulates a non-equilibrium scenerio: 16 trajectories
+ were initialized in the Markov state corresponding to all sub-systems being
+ in state 
+\begin_inset Formula $-1$
+\end_inset
+
+, and termininated if the average of the sub-system states in the next step
+ was larger than 0, however, with a maximum length of 2000 steps (approximately
+ ten times the slowest implied time-scale).
+ The second data-set emulates an equilibrium scenerio were the 16 simulations
+ were uninhibited, however, limited in length to match those of the non-equilibr
+ium case to ensure consistent statistics.
+ The initialization in the second case was identical to the non-equilibrium
+ case.
+\end_layout
+
+\begin_layout Standard
+For each of the 16 trajectories for each scenerio we estimated a dMRF using
+ mildly 
+\begin_inset Formula $L_{1}$
+\end_inset
+
+ regularized maximum likelihood with (
+\begin_inset Formula $\gamma=1/50$
+\end_inset
+
+).
+ The dMRFs were used to compute means and confidence intervals shown.
+\end_layout
+
+\begin_layout Subsection
+dMRF and MSM construction for WLALL peptide
+\end_layout
+
+\begin_layout Standard
+A total of 24, 500 nanosecond molecular dynamics simulations of the WLALL
+ penta-peptide were encoded into 8 binary sub-systems by discretizing the
+ back-bone torsion angles into rotameric states.
+ Specifically, the following discretization maps were used:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{cc}
+\sigma(\phi)=\begin{cases}
+-1 & \text{if }\phi<0^{\circ}\\
+1 & \text{if }\phi\geq0^{\circ}
+\end{cases},\hspace{1em} & \sigma(\psi)=\begin{cases}
+-1 & \text{if }\psi<80^{\circ}\\
+1 & \text{if }\psi\geq80^{\circ}
+\end{cases}\end{array}\label{eq:discmap}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+for all back-bone torsions apart from the N-terminal 
+\begin_inset Formula $\psi$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+For MSM construction all possible global configurations of the local sub-systems
+ (a total of 
+\begin_inset Formula $2^{8}=256$
+\end_inset
+
+) were enumerated and each of the simulation frames were assigned to a global
+ Markov state.
+ From the 24 trajectories we generated 5 groups, each of which had its own
+ 20% of the trajectories left-out.
+ These data-sets were used for estimating 5 maximum likelihood MSMs and
+ 5 maximum likelihood dMRFs which were used to compute means and confidence
+ intervals shown.
+ MSMs and dMRFs with a lag-time of 
+\begin_inset Formula $2\,\mathrm{ns}$
+\end_inset
+
+ were used for comparison of the predicted stationary distributions and
+ implied time-scales.
+ For reference Bayesian posterior samples using the full MD data-set was
+ also carried out
+\begin_inset CommandInset citation
+LatexCommand cite
+key "TrendelkampSchroer2015"
+
+\end_inset
+
+ using the same lag-time.
+ 
+\end_layout
+
+\begin_layout Standard
+Finally, we estimated 24 further dMRFs and MSMs with lag time 
+\begin_inset Formula $2\,\mathrm{ns}$
+\end_inset
+
+ each of which include one trajectory more than the previous starting with
+ 1 randomly selected.
+ The inclusion of data is done randomly without replacement, but is consistent
+ between the dMRFs and MSMs shown.
+ From these dMRFs and MSMs global stationary distributions of Markov states
+ were computed and compared.
+\end_layout
+
+\begin_layout Standard
+All dMRFs were estimated with a regularizer 
+\begin_inset Formula $\gamma=1$
+\end_inset
+
+; varying the regularizer up to one order of magnitude did not change the
+ dMRFs microscopic properties in any appreciable way.
+ Estimation was performed by solving 8 logistic regression problems (one
+ per sub-system) for each dMRF using the SAGA solver as implemented in the
+ scikit-learn python library.
+\end_layout
+
+\begin_layout Subsection
+dMRF construction for Villin and BBA fast folders
+\end_layout
+
+\begin_layout Standard
+We use the simulation data of the fast-folders villin and BBA generously
+ made available to us by DE Shaw Research (New York, NY).
+ These trajectories were encoded into torsion-based sub-systems as for the
+ WLALL peptide (eq.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:discmap"
+
+\end_inset
+
+).
+ 
+\end_layout
+
 \begin_layout Section
 Supporting figures
 \end_layout
@@ -2056,13 +2607,19 @@ status open
 \end_inset
 
 
+\begin_inset Graphics
+	filename figures/_tica_leave_one_out_bba.pdf
+
+\end_inset
+
+
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
 Configurational space sampling in two time-lagged independent components.
  Comparison of molecular dynamic trajectories and trajectories sampled according
  dMRF models estimated on subsets of the molecular dynamics data.
- 
+ Left: Villin headpiece, Right: BBA.
 \begin_inset CommandInset label
 LatexCommand label
 name "fig:Configurational-space-sampling"
@@ -2103,7 +2660,7 @@ status open
 \begin_layout Plain Layout
 Convergence of stationary and dynamic properties in dMRFs and MSMs estimated
  with increasing volumes of simulation data.
- 
+ (Same for BBA missing, will prep when mature model is available) 
 \end_layout
 
 \end_inset
@@ -2136,7 +2693,8 @@ status open
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Comparison of sub-system statistics in dMRFs and MD data.
+Comparison of sub-system statistics in dMRFs and MD data for the villin
+ headpiece.
  A) Correlation of mean sub-system configuration predicted by dMRFs and
  observed in MD.
  B) Correlation of the variance of sub-system configurations predicted by
@@ -2164,6 +2722,48 @@ name "fig:Comparison-of-sub-system"
 \end_layout
 
 \begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/feature_scatter_BBA.pdf
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Comparison of sub-system statistics in dMRFs and MD data for BBA.
+ A) Correlation of mean sub-system configuration predicted by dMRFs and
+ observed in MD.
+ B) Correlation of the variance of sub-system configurations predicted by
+ dMRFs and observed in MD.
+ C) Correlation of average sub-system predictions from dMRF with corresponding
+ values observed in MD.
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Comparison-of-sub-system-1"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
 Supporting GIFs 
 \end_layout
 
