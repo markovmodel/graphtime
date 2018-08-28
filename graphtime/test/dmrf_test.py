@@ -6,6 +6,7 @@ import warnings
 
 from graphtime import markov_random_fields
 from graphtime import ising_utils
+from graphtime import utils as _ut 
 
 from sklearn.preprocessing import OneHotEncoder as OneHotEncoder
 from sklearn.preprocessing import LabelBinarizer
@@ -84,11 +85,23 @@ class TestdMRFIsing(unittest.TestCase):
         np.random.mtrand.seed(0xDEADBEEF)
         self.lag = 1
         self.stride = 1
+        self.nspins = 3
+        self.alpha = 0.10
+        self.IsingTmat = ising_utils.Ising_tmatrix(self.nspins, alpha = self.alpha, gamma = 0)
+        self.ising_states = ising_utils.all_Ising_states(self.nspins)
+        self.Isingdata_state = _ut.simulate_MSM(self.IsingTmat, 1000000, s0 = 0)
+        self.Isingdata = [np.array(self.ising_states[self.Isingdata_state])]
+
 
     def tearDown(self):
         """Revert the state of the rng"""
         np.random.mtrand.set_state(self.state)
-
     def test_dmrf_Ising_one_spin(self):
-        """ self-consistency, estimation and convienence function """
-        self.assertTrue(True)
+        """ estimation with 3 binary uncoupled spins, tests custom encoder """
+        IsingDMRF = markov_random_fields.estimate_dMRF(self.Isingdata, 
+            lag = self.lag, 
+            stride = self.stride, 
+            Encoder = LabelBinarizer(neg_label = -1, pos_label = 1))
+        self_couplings = np.diag(np.vstack([lr.coef_ for lr in IsingDMRF.lrs]))
+        self.assertTrue(np.allclose(np.ones(self.nspins)*self.alpha, -np.log(np.tanh(self_couplings/2.)), rtol = 1e-3, atol = 1e-3))
+        

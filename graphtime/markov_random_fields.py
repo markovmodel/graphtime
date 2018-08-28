@@ -89,15 +89,13 @@ def estimate_dMRF(strajs, lag = 1, stride = 1, Encoder = _OneHotEncoder(sparse=F
         strajs (list of ndarrays): state of each subsystem as a function of time.
         lag (int=1): lag-time used in auto-regression
         stride (int=1): data stride prior to model estimation. lag should be devisible by this quantity.
+        Encoder (sklearn compatible categorical pre-processor): Encoder for spin-states, usually OneHotEncoder is recommended. 
         logistic_regression_kwargs (dict): dictionary of keyword arguments forwarded to 
             sklearn LogisticRegression. 
             The multi_class kwargs is forced to 'ovr' for binary cases and 'multinomial' for multinomial cases.
         
         returns:
-            params_potts (list): coupling parameters for each sub-system
-            intercepts_potts (list): intercept parameters for each sub-system
-            Encoder: OneHotEncoder to used to featurize
-            active_subsystems: indices of non constant subsystems
+            dMRF instance -- estimated dMRF.
     """
     Encoder = Encoder
 
