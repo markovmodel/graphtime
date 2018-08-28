@@ -37,13 +37,12 @@ class dMRF(object):
             _s = _np.array([lr.classes_[_np.random.randint(0, len(lr.classes_))] for lr in self.lrs])
         
         #pre-generate random numbers gives very slight speedups for large nsteps
-        rnd = _np.random.rand((n_steps-1)*self.nsubsys).reshape((self.nsubsys, nsteps - 1))
+        rnd = _np.random.rand((nsteps-1)*self.nsubsys_).reshape((self.nsubsys_, nsteps - 1))
         
         _states = _np.zeros((self.nsubsys_, nsteps))
         _states[:, 0] = _s.copy()
 
         for n in range(nsteps-1):
-            new_state = []
             #for every sub-system sample new configuration given current global configuration
             for j,lr in enumerate(self.lrs):
                 cmf = _np.cumsum(lr.predict_proba(self.encoder.transform([_states[:, n]])))
@@ -61,19 +60,19 @@ class dMRF(object):
                 maxdim times maxdim prior to allocating memory.
             maxdim (int=10000) maximum dimension of transtion matrix (used if safemode=True)
         """
-        ndims = _np.prod([len(lr.classes_) for lr in lrs])
+        ndims = _np.prod([len(lr.classes_) for lr in self.lrs])
         if ndims > maxdim and safemode:
             raise MemoryError(
                 'Maximum safe-mode transition matrix dimension ({:i}x{:i}) exceeded.'.format(maxdim, maxdim))
-        idx_ = [list(range(len(lr.classes_))) for lr in lrs]
+        idx_ = [list(range(len(lr.classes_))) for lr in self.lrs]
 
         T = _np.zeros((ndims, ndims))
         
-        for i, s in enumerate(product(*[lr.classes_ for lr in self.lrs])):
-            _se = self.encoder.transform(np.array([s]))
+        for i, s in enumerate(_itrt.product(*[lr.classes_ for lr in self.lrs])):
+            _se = self.encoder.transform(_np.array([s]))
             # compute transition probabilities for each sub-system state at time t+\tau
             tprobs = [lr.predict_proba(_se) for lr in self.lrs]
-            for j, z_ in enumerate(product(*[lr.classes_ for lr in self.lrs])):
+            for j, z_ in enumerate(_itrt.product(*[lr.classes_ for lr in self.lrs])):
                 # compute product of outcome state
                 T[i, j] = _np.prod([tprob[:, idx.index(z)] for idx, tprob, z in zip(idx_, tprobs, list(z_))])
         return T
@@ -108,8 +107,8 @@ def estimate_dMRF(strajs, lag = 1, stride = 1, Encoder = _OneHotEncoder(sparse=F
     nframes_strided, nsubsys = P0.shape
     
     #find active sub-systems
-    active_subsystems_0 = _np.where([len(np.unique(P0[:, i]))>1 for i in range(nsubsys)])[0]
-    active_subsystems_t = _np.where([len(np.unique(Pt[:, i]))>1 for i in range(nsubsys)])[0]
+    active_subsystems_0 = _np.where([len(_np.unique(P0[:, i]))>1 for i in range(nsubsys)])[0]
+    active_subsystems_t = _np.where([len(_np.unique(Pt[:, i]))>1 for i in range(nsubsys)])[0]
     active_subsystems = list(set(active_subsystems_0).intersection(active_subsystems_t))
     lrs= []
     
