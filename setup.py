@@ -10,10 +10,11 @@ setup(
     url='http://127.0.0.1',
     license='LICENSE.txt',
     description='A module for learning encoding of transition probabilities with undirected graphical models',
-    long_description=open('README.txt').read(),
+    long_description=open('README.md').read(),
     install_requires=[
         "numpy >= 1.3",
         "scikit-learn >= 0.19.0",
+        "scipy >= 1.1.0",
     ],
 )
 
