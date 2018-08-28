@@ -89,6 +89,6 @@ class TestdMRFIsing(unittest.TestCase):
         """Revert the state of the rng"""
         np.random.mtrand.set_state(self.state)
 
-    def test_dmrf_binary(self):
+    def test_dmrf_Ising_one_spin(self):
         """ self-consistency, estimation and convienence function """
         self.assertTrue(True)
