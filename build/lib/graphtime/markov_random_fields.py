@@ -9,7 +9,7 @@ class dMRF(object):
         Implements a dynamic Markov random field model as described in Olsson and Noe 2018
     """
 
-    def __init__(self, lrs, active_subsystems, lag = 1, enc = None, estimated = False):
+    def __init__(self, lrs, active_subsystems, enc = None, estimated = False):
         """
             lrs :  list of LogisticRegression instances (sklearn)
             active_subsystems : list of active sub-systems
@@ -21,16 +21,8 @@ class dMRF(object):
         self.encoder = enc
         self.active_subsystems_ = active_subsystems
         self.estimated_ = estimated
-        self.lag = lag
 
     def simulate(self, nsteps, start = None):
-        """
-            Simulate a trajectory of all active sub-systems described by dMRF.
-            
-            Arguments:
-                nsteps (int) number of steps (in lag-time of model)
-                start (list) initial configuration of trajectory. If not given, initial state is randomized.
-        """
         # if there is no initial condition generate one
         if not isinstance(start, _np.ndarray): 
             _s = _np.array([lr.classes_[_np.random.randint(0, len(lr.classes_))] for lr in self.lrs])
@@ -51,10 +43,6 @@ class dMRF(object):
         return _states.T
 
     def generate_transition_matrix(self, safemode = True, maxdim = 10000):
-        """
-            Compute full transition probability matrix of dMRF.
-            
-        """
         ndims = _np.prod([len(lr.classes_) for lr in lrs])
         if ndims > maxdim and safemode:
             raise MemoryError(
@@ -122,5 +110,5 @@ def estimate_dMRF(strajs, lag = 1, stride = 1, Encoder = _OneHotEncoder(sparse=F
         lrs.append(logr)
 
     
-    return dMRF(lrs, active_subsystems, lag = lag, enc = Encoder, estimated = True)
+    return dMRF(lrs, active_subsystems, enc = Encoder, estimated = True)
 
