@@ -53,7 +53,12 @@ class dMRF(object):
     def generate_transition_matrix(self, safemode = True, maxdim = 10000):
         """
             Compute full transition probability matrix of dMRF.
-            
+
+            Arguments:
+            --------------------
+            safemode (bool=True) enable safemode, checks whether output dimension is below 
+                maxdim times maxdim prior to allocating memory.
+            maxdim (int=10000) maximum dimension of transtion matrix (used if safemode=True)
         """
         ndims = _np.prod([len(lr.classes_) for lr in lrs])
         if ndims > maxdim and safemode:
