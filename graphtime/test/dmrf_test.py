@@ -128,3 +128,23 @@ class TestdMRFIsing(unittest.TestCase):
         self.assertTrue(np.allclose(synth_traj2, np.array([[ 1,-1, 1], 
                                                            [-1, 1,-1]])))
 
+    def test_dmrf_Ising_strided_estimate(self):
+        """ estimation with 3 binary uncoupled spins, compares strided and unstrided self-coupling estimates """
+
+        fact = 2
+
+        IsingDMRF_strided = markov_random_fields.estimate_dMRF(self.Isingdata, 
+            lag = self.lag*fact, 
+            stride = self.stride*fact, 
+            Encoder = LabelBinarizer(neg_label = -1, pos_label = 1))
+
+        IsingDMRF_unstrided = markov_random_fields.estimate_dMRF(self.Isingdata, 
+            lag = self.lag, 
+            stride = self.stride, 
+            Encoder = LabelBinarizer(neg_label = -1, pos_label = 1))
+        
+        sc_strided = np.diag(np.vstack([lr.coef_ for lr in IsingDMRF_strided.lrs]))
+        sc_unstrided = np.diag(np.vstack([lr.coef_ for lr in IsingDMRF_unstrided.lrs]))
+
+        # compare strided and unstrided rate estimates
+        self.assertTrue(np.allclose(sc_unstrided/2., np.arctanh(np.exp(np.log(np.tanh(sc_strided/2.))/fact)), rtol = 1e-3, atol = 1e-3 ))
