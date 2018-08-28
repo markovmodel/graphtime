@@ -89,7 +89,7 @@ class TestdMRFIsing(unittest.TestCase):
         self.alpha = 0.10
         self.IsingTmat = ising_utils.Ising_tmatrix(self.nspins, alpha = self.alpha, gamma = 0)
         self.ising_states = ising_utils.all_Ising_states(self.nspins)
-        self.Isingdata_state = _ut.simulate_MSM(self.IsingTmat, 1000000, s0 = 0)
+        self.Isingdata_state = _ut.simulate_MSM(self.IsingTmat, 500000, s0 = 0)
         self.Isingdata = [np.array(self.ising_states[self.Isingdata_state])]
 
 
@@ -103,5 +103,28 @@ class TestdMRFIsing(unittest.TestCase):
             stride = self.stride, 
             Encoder = LabelBinarizer(neg_label = -1, pos_label = 1))
         self_couplings = np.diag(np.vstack([lr.coef_ for lr in IsingDMRF.lrs]))
-        self.assertTrue(np.allclose(np.ones(self.nspins)*self.alpha, -np.log(np.tanh(self_couplings/2.)), rtol = 1e-3, atol = 1e-3))
-        
+
+        # compare estimated sub-system flip rates to analytical values for zero-coupling Ising model
+        self.assertTrue(np.allclose(np.ones(self.nspins)*self.alpha*self.lag, -np.log(np.tanh(self_couplings/2.)), rtol = 1e-3, atol = 1e-3))
+
+        # check whether estimated fields are almost 0
+        self.assertTrue(np.allclose(np.zeros(self.nspins), np.concatenate([lr.intercept_ for lr in IsingDMRF.lrs])))
+    
+    def test_dmrf_Ising_simulate_test(self):
+        """ estimation with 3 binary uncoupled spins, test simulation with and without initial condition specified """
+        IsingDMRF2 = markov_random_fields.estimate_dMRF(self.Isingdata, 
+            lag = self.lag, 
+            stride = self.stride, 
+            Encoder = LabelBinarizer(neg_label = -1, pos_label = 1))
+
+        # simulation with specified initial condition
+        synth_traj = IsingDMRF2.simulate(nsteps = 2, start = np.ones(self.nspins))
+        # simulation without specified initial condition
+        synth_traj2 = IsingDMRF2.simulate(nsteps = 2)
+
+        self.assertTrue(np.allclose(synth_traj, np.array([[ 1, 1, 1], 
+                                                          [-1, 1,-1]])))
+
+        self.assertTrue(np.allclose(synth_traj2, np.array([[ 1,-1, 1], 
+                                                           [-1, 1,-1]])))
+
