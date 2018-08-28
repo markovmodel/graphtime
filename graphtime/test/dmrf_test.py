@@ -5,6 +5,8 @@ import numpy as np
 import warnings
 
 from graphtime import markov_random_fields
+from graphtime import ising_utils
+
 from sklearn.preprocessing import OneHotEncoder as OneHotEncoder
 from sklearn.preprocessing import LabelBinarizer
 
@@ -19,7 +21,7 @@ class TestdMRFSimple(unittest.TestCase):
         self.stride = 1
         self.straj_binary = [np.array([[0,0],[0,1],[1,1],[1,1],[1,0],[1,0],[1,1],[0,1],[0,0],[0,0]])]
         self.straj_multinomial = [np.array([[0,0],[0,1],[1,2],[1,2],[1,0],[2,0],[1,1],[0,1],[2,0],[0,2]])]
-        self.straj_bin_mult =  [np.array([[0,0], [0,2], [1,1], [1,2], [1,2], [1,2], [1,1], [0,2], [0,1], [1,1]])]
+        self.straj_bin_mult =  [np.array([[0,0], [0,2], [1,1], [1,2], [1,2], [1,2], [1,1], [0,2], [0,1], [1,1], [0,1], [0,0], [0,2]])]
         
     def tearDown(self):
         """Revert the state of the rng"""
@@ -62,7 +64,7 @@ class TestdMRFSimple(unittest.TestCase):
         self.assertEqual(tmat.shape, (9, 9))
 
     def test_dmrf_one_multinomial_one_binary(self):        
-        """ self-consistency, estimation and convienence function, multiple trajectories"""
+        """ self-consistency, estimation and convienence function, single trajectory"""
         dmrf_mbin = markov_random_fields.estimate_dMRF(self.straj_bin_mult, 
             lag = self.lag, 
             stride = self.stride, 
@@ -73,3 +75,20 @@ class TestdMRFSimple(unittest.TestCase):
         tmat = dmrf_mbin.generate_transition_matrix()
         self.assertEqual(tmat.shape, (6, 6))
 
+class TestdMRFIsing(unittest.TestCase):
+    def setUp(self):
+        """Store state of the rng"""
+        self.state = np.random.mtrand.get_state()
+
+        """Reseed the rng to enforce 'deterministic' behavior"""
+        np.random.mtrand.seed(0xDEADBEEF)
+        self.lag = 1
+        self.stride = 1
+
+    def tearDown(self):
+        """Revert the state of the rng"""
+        np.random.mtrand.set_state(self.state)
+
+    def test_dmrf_binary(self):
+        """ self-consistency, estimation and convienence function """
+        self.assertTrue(True)

@@ -64,7 +64,7 @@ class dMRF(object):
         if ndims > maxdim and safemode:
             raise MemoryError(
                 'Maximum safe-mode transition matrix dimension ({:i}x{:i}) exceeded.'.format(maxdim, maxdim))
-        idx_ = [list(range(len(lr.classes_))) for lr in self.lrs]
+        idx_ = [lr.classes_.tolist() for lr in self.lrs]
 
         T = _np.zeros((ndims, ndims))
         
