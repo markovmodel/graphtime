@@ -35,18 +35,22 @@ class dMRF(object):
         # if there is no initial condition generate one
         if not isinstance(start, _np.ndarray): 
             _s = _np.array([lr.classes_[_np.random.randint(0, len(lr.classes_))] for lr in self.lrs])
-        
+        else:
+            _s = start.copy()
+
         #pre-generate random numbers gives very slight speedups for large nsteps
         rnd = _np.random.rand((nsteps-1)*self.nsubsys_).reshape((self.nsubsys_, nsteps - 1))
         
         _states = _np.zeros((self.nsubsys_, nsteps))
         _states[:, 0] = _s.copy()
 
+        idx_ = [lr.classes_.tolist() for lr in self.lrs]
+
         for n in range(nsteps-1):
             #for every sub-system sample new configuration given current global configuration
             for j,lr in enumerate(self.lrs):
-                cmf = _np.cumsum(lr.predict_proba(self.encoder.transform([_states[:, n]])))
-                _states[j, n + 1] = _np.searchsorted(cmf, rnd[j, n])
+                cmf = _np.cumsum(lr.predict_proba(self.encoder.transform(_states[:, n].reshape(-1, 1) ) ))
+                _states[j, n + 1] = idx_[j][_np.searchsorted(cmf, rnd[j, n])]
 
         return _states.T
 
@@ -78,7 +82,7 @@ class dMRF(object):
         return T
     
     
-def estimate_dMRF(strajs, lag = 1, stride = 1, Encoder = _OneHotEncoder(sparse=False), 
+def estimate_dMRF(strajs, lag = 1, stride = 1, Encoder = _OneHotEncoder(sparse = False), 
                   logistic_regression_kwargs = {'fit_intercept': False, 
                    'penalty': 'l1', 'C': 1., 'tol': 1e-4, 'solver': 'saga'}):
     """
