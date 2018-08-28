@@ -28,6 +28,7 @@ class dMRF(object):
             Simulate a trajectory of all active sub-systems described by dMRF.
             
             Arguments:
+            --------------------
                 nsteps (int) number of steps (in lag-time of model)
                 start (list) initial configuration of trajectory. If not given, initial state is randomized.
         """
@@ -82,8 +83,10 @@ def estimate_dMRF(strajs, lag = 1, stride = 1, Encoder = _OneHotEncoder(sparse=F
                   logistic_regression_kwargs = {'fit_intercept': False, 
                    'penalty': 'l1', 'C': 1., 'tol': 1e-4, 'solver': 'saga'}):
     """
+        Estimate dMRF using logistic (binary sub-systems) or softmax (multinomal sub-systems) regression.
+
         Arguments:
-        ----------------------
+        --------------------
         strajs (list of ndarrays): state of each subsystem as a function of time.
         lag (int=1): lag-time used in auto-regression
         stride (int=1): data stride prior to model estimation. lag should be devisible by this quantity.
@@ -128,4 +131,4 @@ def estimate_dMRF(strajs, lag = 1, stride = 1, Encoder = _OneHotEncoder(sparse=F
 
     
     return dMRF(lrs, active_subsystems, lag = lag, enc = Encoder, estimated = True)
-
+    
