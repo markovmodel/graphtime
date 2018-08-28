@@ -11,6 +11,10 @@ class dMRF(object):
 
     def __init__(self, lrs, active_subsystems, lag = 1, enc = None, estimated = False):
         """
+            Constructor for dMRF class.
+
+            Arguments:
+            --------------------
             lrs :  list of LogisticRegression instances (sklearn)
             active_subsystems : list of active sub-systems
             estimated : bool, indicator whether dMRF is estimated
@@ -30,7 +34,7 @@ class dMRF(object):
             Arguments:
             --------------------
                 nsteps (int) number of steps (in lag-time of model)
-                start (list) initial configuration of trajectory. If not given, initial state is randomized.
+                start (ndarray) initial configuration of trajectory. If not given, initial state is randomized.
         """
         # if there is no initial condition generate one
         if not isinstance(start, _np.ndarray): 
@@ -102,7 +106,8 @@ def estimate_dMRF(strajs, lag = 1, stride = 1, Encoder = _OneHotEncoder(sparse =
             dMRF instance -- estimated dMRF.
     """
     Encoder = Encoder
-
+    if stride > lag:
+        raise ValueError("Stride exceeds lag. Lag has to be larger or equal to stride.")
     strided_strajs = [t[::stride] for t in strajs]
     P0 = _np.vstack([t[:-lag//stride] for t in strided_strajs])
     Pt = _np.vstack([t[lag//stride:] for t in strided_strajs]) 
