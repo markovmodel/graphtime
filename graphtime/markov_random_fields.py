@@ -119,7 +119,7 @@ def estimate_dMRF(strajs, lag = 1, stride = 1, Encoder = _OneHotEncoder(sparse =
     active_subsystems = list(set(active_subsystems_0).intersection(active_subsystems_t))
     lrs= []
     
-    #remove constant spins
+    #remove constant sub-systems
     P0 = P0[:, active_subsystems]
     Pt = Pt[:, active_subsystems]
     
