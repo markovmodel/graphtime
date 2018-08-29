@@ -1,5 +1,7 @@
 import itertools as _itrt
 import numpy as _np
+
+
 from sklearn.preprocessing import OneHotEncoder as _OneHotEncoder
 from sklearn.linear_model import LogisticRegression as _LogisticRegression
 
@@ -84,6 +86,25 @@ class dMRF(object):
                 # compute product of outcome state
                 T[i, j] = _np.prod([tprob[:, idx.index(z)] for idx, tprob, z in zip(idx_, tprobs, list(z_))])
         return T
+
+    def get_subsystem_couplings(self):
+        """
+            Returns estimated sub-system couplings (J), ndarray
+        """
+        return _np.vstack([lr.coef_ for lr in self.lrs])
+
+    def get_subsystem_biases(self):
+        """
+            Returns estimated sub-system biases (h), ndarray
+        """
+        return _np.concatenate([lr.intercept_ for lr in self.lrs])
+
+    def get_active_subsystems(self):
+        """
+            Return indices of sub-systems active in dMRF
+        """
+        return self.active_subsystems_
+
     
     
 def estimate_dMRF(strajs, lag = 1, stride = 1, Encoder = _OneHotEncoder(sparse = False), 

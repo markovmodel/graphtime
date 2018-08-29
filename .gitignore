@@ -7,3 +7,4 @@ dist/
 graphtime/*.pyc
 graphtime/__pycache__
 graphtime/test/__pycache__
+notebooks/.*
