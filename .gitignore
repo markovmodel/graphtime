@@ -4,3 +4,4 @@ build/
 graph_time/__pycache__/
 graphtime.egg-info
 dist/
+graphtime/*.pyc
