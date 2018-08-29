@@ -1,10 +1,7 @@
 import itertools as _itrt
 import numpy as _np
-
-
 from sklearn.preprocessing import OneHotEncoder as _OneHotEncoder
 from sklearn.linear_model import LogisticRegression as _LogisticRegression
-
 
 class dMRF(object):
     """
@@ -104,7 +101,11 @@ class dMRF(object):
             Return indices of sub-systems active in dMRF
         """
         return self.active_subsystems_
-
+    def get_subsystem_count(self):
+        """
+            Returns number of active sub-systems
+        """
+        return self.nsubsys_
     
     
 def estimate_dMRF(strajs, lag = 1, stride = 1, Encoder = _OneHotEncoder(sparse = False), 
@@ -126,7 +127,6 @@ def estimate_dMRF(strajs, lag = 1, stride = 1, Encoder = _OneHotEncoder(sparse =
         returns:
             dMRF instance -- estimated dMRF.
     """
-    Encoder = Encoder
     if stride > lag:
         raise ValueError("Stride exceeds lag. Lag has to be larger or equal to stride.")
     strided_strajs = [t[::stride] for t in strajs]

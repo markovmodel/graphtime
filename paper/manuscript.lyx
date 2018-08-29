@@ -96,7 +96,7 @@
 \begin_body
 
 \begin_layout Title
-Graphical Models of Molecular Kinetics 
+Dynamic Graphical Models of Molecular Kinetics 
 \end_layout
 
 \begin_layout Author
@@ -147,6 +147,7 @@ tion based upon several local discretizations.
 n to molecular and model systems how the approach enables the discovery
  of microscopic system configurations not observed in the data used to estimate
  the model.
+ 
 \end_layout
 
 \begin_layout Section
