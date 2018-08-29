@@ -1,0 +1,15 @@
+Metadata-Version: 1.0
+Name: graphtime
+Version: 0.0a0
+Summary: A module for learning encoding of transition probabilities with undirected graphical models
+Home-page: http://127.0.0.1
+Author: Simon Olsson
+Author-email: simon.olsson@fu-berlin.de
+License: LICENSE.txt
+Description: # graphtime 
+        A python module for generation and analysis of undirected graphical models encoding transition densities.
+        
+        
+        
+        
+Platform: UNKNOWN
