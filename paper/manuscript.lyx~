@@ -2426,7 +2426,7 @@ a posteriori
  were used for comparison of the predicted stationary distributions and
  implied time-scales.
  For reference Bayesian posterior samples using the full MD data-set was
- also carried out 
+ also carried out
 \begin_inset CommandInset citation
 LatexCommand cite
 key "TrendelkampSchroer2015"
@@ -2443,7 +2443,7 @@ Finally, we estimated 24 further dMRFs and MSMs with lag time
 \end_inset
 
  each of which include one trajectory more than the previous starting with
- one which was randomly selected.
+ 1 randomly selected.
  The inclusion of data is done randomly without replacement, but is consistent
  between the dMRFs and MSMs shown.
  From these dMRFs and MSMs global stationary distributions of Markov states
