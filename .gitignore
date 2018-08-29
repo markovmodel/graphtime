@@ -2,3 +2,5 @@ build/
 .vscode/
 .DS_Store
 graph_time/__pycache__/
+graphtime.egg-info
+dist/
