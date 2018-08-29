@@ -5,3 +5,5 @@ graph_time/__pycache__/
 graphtime.egg-info
 dist/
 graphtime/*.pyc
+graphtime/__pycache__
+graphtime/test/__pycache__
