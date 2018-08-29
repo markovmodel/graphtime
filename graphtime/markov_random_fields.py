@@ -107,7 +107,6 @@ class dMRF(object):
         """
         return self.nsubsys_
     
-    
 def estimate_dMRF(strajs, lag = 1, stride = 1, Encoder = _OneHotEncoder(sparse = False), 
                   logistic_regression_kwargs = {'fit_intercept': False, 
                    'penalty': 'l1', 'C': 1., 'tol': 1e-4, 'solver': 'saga'}):
@@ -156,6 +155,4 @@ def estimate_dMRF(strajs, lag = 1, stride = 1, Encoder = _OneHotEncoder(sparse =
         logr = _LogisticRegression(**logistic_regression_kwargs).fit(P0, Pt[:, i])
         lrs.append(logr)
 
-    
     return dMRF(lrs, active_subsystems, lag = lag, enc = Encoder, estimated = True)
-    

@@ -8,7 +8,7 @@ def Ising_tmatrix(nspins, alpha=0.1, gamma=0.95, ratematrix=False):
         Implements Glaubers master equation variant of the (1D) Ising model with periodic boundary conditions
 
         (J Math Phys 4 294 (1963); doi: 10.1063/1.1703954)
-        nspins: number of spins in model (Note: returns 2^nspins times 2^nspins matix)
+        nspins: number of spins in model (Note: returns 2^nspins times 2^nspins matrix)
         alpha: basal spin flip-rate, defines time-scale (=0.1)
         gamma: gamma is equal to tanh(\beta 2J) where J is the spin-spin coupling constant in a corresponding Ising model, and \beta is the inverse temperature. 
         ratematrix: return rate matrix as well

@@ -13,7 +13,7 @@ S. Olsson and F. Noé "Dynamic Graphical Models of Molecular Kinetics" _in prepa
 
 
 ### Dependencies
-The libary has only been tested Mac OSX.
+The `graphtime` library is minimalisitic and makes extensive use of `numpy` and `sklearn`.
 
 - python >= 3.6.1
 - numpy >= 1.3
@@ -21,6 +21,8 @@ The libary has only been tested Mac OSX.
 - scipy >= 1.1.0
 - msmtools >= 1.2.1
 - pyemma >= 2.5.2
+
+The libary has only been tested Mac OSX.
 
 ### Installation
 
@@ -33,4 +35,4 @@ to test you installation you can run
 `python -m unittest graphtime/test/dmrf_test.py`
 
 ### Issues and bugs
-If you are having problems unsing this library or discover any bugs please get in touch through the issues section on the `graphtime` github repository. For bug reports please provide a reproducable example.
+If you are having problems using this library or discover any bugs please get in touch through the issues section on the `graphtime` github repository. For bug reports please provide a reproducable example.
