@@ -1,8 +1,8 @@
 from setuptools import setup
-
+from graphtime import __version__
 setup(
     name='graphtime',
-    version='0.0a',
+    version = __version__,
     author='Simon Olsson',
     author_email='simon.olsson@fu-berlin.de',
     packages=['graphtime', 'graphtime.test'],
