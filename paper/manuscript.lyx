@@ -326,11 +326,30 @@ ng and potentially powerful new way to model molecular kinetics.
  readily predict beyond the training domain, and can thereby speed up the
  discovery of meta-stable states.
  However, ambiguity in the sub-system encoding and similarly in decoding
- predictions from a sub-system encoded configuration to a molecular structure
+ predictions from a sub-system encoded configuration tos a molecular structure
  remains challenging when deploying dMRFs.
  Nevertheless, we envision that this work will stimulate further research
  in to the use of alternative, more statistically efficient ways to encode
  molecular representation when modeling molecular kinetics.
+\end_layout
+
+\begin_layout Section*
+Dynamic graphical models
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+TODO: Outline general idea of dynamic graphical models and their use to
+ model kinetics in molecular systems.
+ 
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
