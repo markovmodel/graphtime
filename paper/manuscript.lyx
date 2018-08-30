@@ -121,28 +121,44 @@ Department of Mathematics and Computer Science, Freie Universität Berlin,
 \end_layout
 
 \begin_layout Abstract
-Markov state models and related Master equation models are powerful tools
- to study the kinetics of conformational change in molecules.
- These models segment the conformational space into 'global' configurational
- states whose mutual exchange estimated using time-resolved data.
- This approach generally works well when the number of segments is larger
- than the number of meta-stable states at a given time-resolution, 
+Detailed atomistic descriptions of molecular dynamics make use of global
+ state variables – that is, a molecular configuration is represented by
+ a single global variable, 
+\begin_inset Formula $\mathbf{x}$
+\end_inset
+
+.
+ Probabilistic or rate models of molecular kinetcs, such as Markov state
+ models, similarly segment 
+\begin_inset Formula $\mathbf{x}$
+\end_inset
+
+ into discrete 
+\emph on
+Markov states
+\emph default
+, to facilitate subsequent estimation using time-resolved data.
+ This approach generally works well when states meta-stable at a given time-reso
+lution, 
 \begin_inset Formula $\tau$
 \end_inset
 
-, and sufficient data is available.
- We here describe an alternative approach which leverages a molecular representa
-tion based upon several local discretizations.
- The time-evolution of the local representations is governed by their mutual
- dependence and their local tendencies to adopt certain configurations both
- encoded by the model.
- The advantage of such a localized model is two-fold: firstly, it constitutes
- a more compact parametric representation of the dynamics and secondly,
- it enables prediction of transitions to and from molecular configurations
- not observed in the data used to parameterize the model.
+, are well separated in the discretization and sufficient data is available.
+ Nevertheless, the number of global meta-stable states may grow exponentially
+ with the size of the molecular system, making discretization and estimation
+ difficult.
+ In this work we describe an alternative approach which leverages a molecular
+ representation based upon several local sub-systems.
+ The time-evolution of the sub-systems is governed by their mutual dependence
+ and their local tendencies to adopt certain configurations both encoded
+ by the model.
+ Such a localized model has a compact parametric form and statistical robustness
+ even with sparse data.
+ Furthermore, as such a model sidesteps the explicit representation of each
+ global state configuration, we can accurately predict beyond the observed
+ configurational domain.
  We provide an implementation of such a model using a dynamic variant of
- a Markov random field (MRF) which is a generalization of the Ising model
- from statistical physics.
+ the Ising model, the dynamic Markov random field (dMRF).
  We present maximum likelihood inference schemes and show through the applicatio
 n to molecular and model systems how the approach enables the discovery
  of microscopic system configurations not observed in the data used to estimate
