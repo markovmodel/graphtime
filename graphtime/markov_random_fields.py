@@ -3,7 +3,6 @@ import numpy as _np
 from sklearn.preprocessing import OneHotEncoder as _OneHotEncoder
 from sklearn.linear_model import LogisticRegression as _LogisticRegression
 
-
 class dMRF(object):
     """
         Implements a dynamic Markov random field model as described in Olsson and Noe 2018
@@ -84,7 +83,29 @@ class dMRF(object):
                 # compute product of outcome state
                 T[i, j] = _np.prod([tprob[:, idx.index(z)] for idx, tprob, z in zip(idx_, tprobs, list(z_))])
         return T
-    
+
+    def get_subsystem_couplings(self):
+        """
+            Returns estimated sub-system couplings (J), ndarray
+        """
+        return _np.vstack([lr.coef_ for lr in self.lrs])
+
+    def get_subsystem_biases(self):
+        """
+            Returns estimated sub-system biases (h), ndarray
+        """
+        return _np.concatenate([lr.intercept_ for lr in self.lrs])
+
+    def get_active_subsystems(self):
+        """
+            Return indices of sub-systems active in dMRF
+        """
+        return self.active_subsystems_
+    def get_subsystem_count(self):
+        """
+            Returns number of active sub-systems
+        """
+        return self.nsubsys_
     
 def estimate_dMRF(strajs, lag = 1, stride = 1, Encoder = _OneHotEncoder(sparse = False), 
                   logistic_regression_kwargs = {'fit_intercept': False, 
@@ -105,7 +126,6 @@ def estimate_dMRF(strajs, lag = 1, stride = 1, Encoder = _OneHotEncoder(sparse =
         returns:
             dMRF instance -- estimated dMRF.
     """
-    Encoder = Encoder
     if stride > lag:
         raise ValueError("Stride exceeds lag. Lag has to be larger or equal to stride.")
     strided_strajs = [t[::stride] for t in strajs]
@@ -135,6 +155,4 @@ def estimate_dMRF(strajs, lag = 1, stride = 1, Encoder = _OneHotEncoder(sparse =
         logr = _LogisticRegression(**logistic_regression_kwargs).fit(P0, Pt[:, i])
         lrs.append(logr)
 
-    
     return dMRF(lrs, active_subsystems, lag = lag, enc = Encoder, estimated = True)
-    

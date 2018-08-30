@@ -15,6 +15,6 @@ setup(
         "numpy >= 1.3",
         "scikit-learn >= 0.19.0",
         "scipy >= 1.1.0",
+        "msmtools >= 1.2.1",
     ],
 )
-
