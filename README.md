@@ -26,13 +26,11 @@ The libary has only been tested Mac OSX.
 
 ### Installation
 
-Clone this repository and install using
+Clone this repository and test
+`python setup.py test`
 
+If succesfull install using
 `python setup.py install`
-
-to test you installation you can run
-
-`python -m unittest graphtime/test/dmrf_test.py`
 
 ### Issues and bugs
 If you are having problems using this library or discover any bugs please get in touch through the issues section on the `graphtime` github repository. For bug reports please provide a reproducable example.
