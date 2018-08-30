@@ -51,9 +51,10 @@ class dMRF(object):
 
         for n in range(nsteps-1):
             #for every sub-system sample new configuration given current global configuration
-            for j,lr in enumerate(self.lrs):
-                cmf = _np.cumsum(lr.predict_proba(self.encoder.transform(_states[:, n].reshape(-1, 1) ) ))
-                _states[j, n + 1] = idx_[j][_np.searchsorted(cmf, rnd[j, n])]
+            encoded_state = self.encoder.transform(_states[:, n].reshape(-1, 1))
+            cmfs = _np.cumsum([lr.predict_proba(encoded_state).ravel() for lr in self.lrs], axis = 1)
+            for j in range(self.nsubsys_):
+                _states[j, n + 1] = idx_[j][_np.searchsorted(cmfs[j, :], rnd[j, n])]
 
         return _states.T
 
