@@ -49,13 +49,17 @@ class dMRF(object):
 
         idx_ = [lr.classes_.tolist() for lr in self.lrs]
 
+        # define implicit functions for sub-system sampling.
+        state_samplers = [(lambda es, lr:lr.predict_proba(es).ravel()[0]<_np.random.rand() )
+            if len(i)==2 else (lambda es, lr:_np.random.multinomial(1, 
+                                              pvals = lr.predict_proba(es).ravel()).argmax())
+                                              for i in idx_  ]
+
         for n in range(nsteps-1):
             #for every sub-system sample new configuration given current global configuration
             encoded_state = self.encoder.transform(_states[:, n].reshape(1, -1))
-            for j, x in enumerate([_np.random.multinomial(1, 
-                                              pvals = lr.predict_proba(encoded_state).ravel()).argmax() 
-                           for lr in self.lrs]):
-                _states[j, n + 1] = idx_[j][x]
+            for j, (sampler, lr) in enumerate(zip(state_samplers, self.lrs)):
+                _states[j, n + 1] = idx_[j][sampler(encoded_state, lr)]
         return _states.T
 
     def generate_transition_matrix(self, safemode = True, maxdim = 10000):
