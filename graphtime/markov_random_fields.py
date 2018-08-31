@@ -50,6 +50,9 @@ class dMRF(object):
         idx_ = [lr.classes_.tolist() for lr in self.lrs]
 
         # define implicit functions for sub-system sampling.
+        # this avoids using np.random.multinomial for binary sub-systems
+        # which can lead to a significant speedup
+        
         state_samplers = [(lambda es, lr:lr.predict_proba(es).ravel()[0]<_np.random.rand() )
             if len(i)==2 else (lambda es, lr:_np.random.multinomial(1, 
                                               pvals = lr.predict_proba(es).ravel()).argmax())
