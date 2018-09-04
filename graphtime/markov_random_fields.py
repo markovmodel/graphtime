@@ -41,9 +41,6 @@ class dMRF(object):
         else:
             _s = start.copy()
 
-        #pre-generate random numbers gives very slight speedups for large nsteps
-        rnd = _np.random.rand((nsteps-1)*self.nsubsys_).reshape((self.nsubsys_, nsteps - 1))
-        
         _states = _np.zeros((self.nsubsys_, nsteps))
         _states[:, 0] = _s.copy()
 
