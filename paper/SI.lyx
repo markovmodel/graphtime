@@ -439,7 +439,7 @@ Spectral analysis of dMRFs
 Performing a general symbolic analysis of the spectral properties of dMRFs
  is not trivial as the transition matrices describing all by the simplest
  systems (with 1 and 2 binary sub-systems) are intractable.
- In this section we show the simplest case analytically, to build some intution
+ In this section we show the simplest case analytically, to build some intuition
  for interpretation of numerical results for more interesting cases.
  
 \end_layout
@@ -572,7 +572,7 @@ where
 \begin_inset Formula $\tau$
 \end_inset
 
- is the unitless integer used when estimating 
+ is the unit-less integer used when estimating 
 \begin_inset Formula $J$
 \end_inset
 
@@ -703,7 +703,7 @@ We numerically compute the characteristic time-scales (
 \end_inset
 
  (sub-system configuration change rate) for transition probability matrices
- which are time-discretizations of the Master equation dynamics prescribed
+ which are time-discretization of the Master equation dynamics prescribed
  by Glauber 
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -944,16 +944,16 @@ key "Glauber1963"
 
  transition matrix.
  We generated two data-sets using this MSM.
- The first data set emulates a non-equilibrium scenerio: 16 trajectories
+ The first data set emulates a non-equilibrium scenario: 16 trajectories
  were initialized in the Markov state corresponding to all sub-systems being
  in state 
 \begin_inset Formula $-1$
 \end_inset
 
-, and termininated if the average of the sub-system states in the next step
+, and terminated if the average of the sub-system states in the next step
  was larger than 0, however, with a maximum length of 2000 steps (approximately
  ten times the slowest implied time-scale).
- The second data-set emulates an equilibrium scenerio were the 16 simulations
+ The second data-set emulates an equilibrium scenario were the 16 simulations
  were uninhibited, however, limited in length to match those of the non-equilibr
 ium case to ensure consistent statistics.
  The initialization in the second case was identical to the non-equilibrium
@@ -1136,7 +1136,8 @@ Using the HMMs we assign each MD frame to one of the meta-stable states
  other observations.
  This procedure generated 5 and 4 data-sets for villin and BBA respectively.
  Each of the data-sets are composed of fragments of the original MD data-sets,
- every one of these fragments are required to be atleast the length of 
+ every one of these fragments are required to be at least the length of
+ 
 \begin_inset Formula $\tau$
 \end_inset
 
@@ -1161,6 +1162,99 @@ t for BBA.
  The results presented were robust to minor perturbations in either of these
  parameters.
  
+\end_layout
+
+\begin_layout Subsubsection*
+Reconstructing molecular trajectories from dMRF trajectories
+\end_layout
+
+\begin_layout Standard
+We reconstruct molecular configurations from the dMRF trajectories by finding
+ the MD frame in a reference simulation with is closest to the synthetic
+ frame.
+ The reported reconstruction errors (
+\begin_inset Formula $\epsilon$
+\end_inset
+
+) are the Hamming distance between the synthetic frame and the selected
+ reference MD frame.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Enumerate
+\begin_inset Formula $\mathbf{S}=(\mathbf{s}_{0},\text{\mathbf{s}}_{\tau},...)$
+\end_inset
+
+ - contains sub-system encoding of original MD trajectory
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\mathbf{X}=(\mathbf{x}_{0},\text{x}_{\tau},...)$
+\end_inset
+
+ - contains all atom representation of original MD trajectory
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\mathbf{\hat{S}}\sim p(\mathbf{s}_{t}\mid\mathbf{s}_{t-\tau})$
+\end_inset
+
+ - Generate trajectory from dMRF
+\end_layout
+
+\begin_layout Enumerate
+for each 
+\begin_inset Formula $\mathbf{\hat{s}}$
+\end_inset
+
+ in 
+\begin_inset Formula $\mathbf{\hat{S}}$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset Formula $k\leftarrow\arg\min\left(\text{hamming}(\mathbf{\hat{s}},\mathbf{S}\right))$
+\end_inset
+
+ - find closest frame in sub-system encoding
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\mathbf{\hat{X}}_{i}\leftarrow\mathbf{\hat{X}}_{k}$
+\end_inset
+
+ - copy coordinates from original MD trajectory.
+\end_layout
+
+\end_deeper
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+dMRF to MD reconstruction.The reconstruction error reported is given by the
+ hamming distance evaluated to select the frame.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
@@ -1189,21 +1283,21 @@ status open
 Spectral analysis of dMRF dynamics on 1D Ising models.
  A) Meta-stability phase-diagram in 1 spin Ising model with dMRF dynamics.
  B) Implied time-scales in 1 spin Ising model with time-discrete Glauber
- dynamics with as a function of self-coupling (
+ dynamics as a function of self-coupling (
 \begin_inset Formula $\gamma)$
 \end_inset
 
- and subsystem configuration change rate (
+ and sub-system configuration change rate (
 \begin_inset Formula $\alpha$
 \end_inset
 
 ).
  C) Implied time-scales in 9 spin 1D Ising model with time-discrete Glauber
- dynamics with as a function of sub-system coupling (
+ dynamics as a function of sub-system coupling (
 \begin_inset Formula $\gamma)$
 \end_inset
 
- and subsystem configuration change rate (
+ and sub-system configuration change rate (
 \begin_inset Formula $\alpha$
 \end_inset
 
@@ -1249,13 +1343,17 @@ status open
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Comparison of parameters estimated for dMRFs and MSMs for the 9 spin 1D
- Ising model.
- A and B) comparison estimated 
+Comparison of parameters estimated for dMRFs and MSMs for a 9 spin 1D Ising
+ model.
+ A and B) comparison of estimated 
 \begin_inset Formula $\{J_{ij}\}$
 \end_inset
 
- values for NED and ED data sets when local biases were estimated or not.
+ values for NED and ED data sets when local biases 
+\begin_inset Formula $\{h_{i}\}$
+\end_inset
+
+ are estimated or not.
  C) Scatter-plot of true transition probabilities versus predicted transition
  probabilities from dMRF estimated using ED.
  D) Scatter-plot of true transition probabilities versus values from a MSM
@@ -1287,8 +1385,34 @@ sideways false
 status open
 
 \begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="2" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="0pt">
+<column alignment="center" valignment="top" width="0pt">
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
 
+\begin_layout Plain Layout
+Villin
 \end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+BBA
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
 
 \begin_layout Plain Layout
 \begin_inset Graphics
@@ -1297,19 +1421,43 @@ status open
 \end_inset
 
 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
 \begin_inset Graphics
 	filename figures/_tica_leave_one_out_bba.pdf
 
 \end_inset
 
 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Configurational space sampling in two time-lagged independent components.
- Comparison of molecular dynamic trajectories and trajectories sampled according
- dMRF models estimated on subsets of the molecular dynamics data.
- Left: Villin headpiece, Right: BBA.
+Configurational space sampling in the two principal time-lagged independent
+ components.
+ Comparison of spatial sampling by molecular dynamics trajectories and trajector
+ies sampled according dMRF models estimated on subsets of the molecular
+ dynamics data.
+ The subsets each have the meta-stable state indicated by the plot sub-title
+ left out.
 \begin_inset CommandInset label
 LatexCommand label
 name "fig:Configurational-space-sampling"

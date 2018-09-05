@@ -367,6 +367,80 @@ Dynamic graphical models
 \end_layout
 
 \begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/test.png
+	width 4.2in
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Illustrative comparison of molecular representations in Markov state models
+ (MSM) and dynamic graphical models (DGM).
+ Upper panel shows cartoon representation of different protein conformational
+ states.
+ MIddle panel show MSM where the current Markov state is indicated by, 
+\begin_inset Formula $S_{i}$
+\end_inset
+
+.
+ The lower panel show DGMs where the current state of the system is represented
+ by a concatenation several sub-systems, 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+.
+ The MSM transition probabilities of in between Markov states 
+\begin_inset Formula $S_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $S_{j}$
+\end_inset
+
+ are shown as 
+\begin_inset Formula $p_{ij}$
+\end_inset
+
+.
+ The DGM sub-system coupling between 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma_{j}$
+\end_inset
+
+ is shown as 
+\begin_inset Formula $J_{ij}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 \begin_inset Note Note
 status open
 
@@ -386,7 +460,7 @@ Results
 \end_layout
 
 \begin_layout Subsection
-Dynamic Markov random fields
+Dynamic Markov random fields as an implementation of dynamic graphical models
 \end_layout
 
 \begin_layout Standard
@@ -491,59 +565,6 @@ key "Ravikumar2010,Roudi2009"
 \end_layout
 
 \begin_layout Standard
-\begin_inset Float figure
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\begin_inset Graphics
-	filename figures/test.png
-	width 4.2in
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption Standard
-
-\begin_layout Plain Layout
-Illustrative comparison of molecular representations in Markov state models
- and dynamic Markov random fields.
- Markov state models represent molecular configurations as global discrete
- states (green rounded boxes) whereas dynamic Markov random fields represent
- molecular configurations as a concatenation of several local molecular
- configurations (white circles).
- The transition probabilities of in between global configurations 
-\begin_inset Formula $i$
-\end_inset
-
-and 
-\begin_inset Formula $j$
-\end_inset
-
- are encoded in a single value 
-\begin_inset Formula $T_{ij}$
-\end_inset
-
- in MSMs.
- In dMRFs the transition probabilities are encoded as coupling between locally
- defined structural elements.
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
 In the context of molecular simulations and kinetics our data does not consitute
  independently and identically drawn samples from a configurational equilibrium
  distribution, rather we have a time-series of a molecular system.
@@ -564,7 +585,7 @@ In the context of molecular simulations and kinetics our data does not consitute
 \end_inset
 
  sub-systems 
-\begin_inset Formula $s_{t,i}$
+\begin_inset Formula $\sigma_{t,i}$
 \end_inset
 
 .
@@ -750,7 +771,7 @@ spin-flip
 
 \begin_layout Standard
 If we consider the conditional probability of a single sub-system 
-\begin_inset Formula $s_{t,i}$
+\begin_inset Formula $\sigma_{t,i}$
 \end_inset
 
  taking the state 
@@ -795,7 +816,7 @@ Since the marginal probability distributions of the sub-systems of
 \begin_layout Standard
 \begin_inset Formula 
 \begin{equation}
-p(\mathbf{s}_{t}\mid\mathbf{s}_{t-\tau})=\prod_{i}^{N}p(\sigma_{t,i}\mid\mathbf{s}_{t-\tau})=\prod_{i}^{N}\frac{1}{1+\exp[-s_{t,i}2\theta_{t-\tau,i}]}.\label{eq:full_tdens}
+p(\mathbf{s}_{t}\mid\mathbf{s}_{t-\tau})=\prod_{i}^{N}p(\sigma_{t,i}\mid\mathbf{s}_{t-\tau})=\prod_{i}^{N}\frac{1}{1+\exp[-\sigma_{t,i}2\theta_{t-\tau,i}]}.\label{eq:full_tdens}
 \end{equation}
 
 \end_inset
@@ -1061,8 +1082,7 @@ status open
 
 \begin_layout Plain Layout
 Inference of model parameters for a 1-dimensional 9 spin Ising model.
- A) Visualization of equilibrium and non-equilibrium data sets used to estimate
- dMRFs.
+ A) Illustration of the 9-spin 1D Ising model with periodic boundary conditions.
  B) Comparison of coupling parameters estimated using equilibrium and non-equili
 brium data sets.
  C) Analytic stationary distributions of 
@@ -1070,6 +1090,11 @@ brium data sets.
 \end_inset
 
  and empirical histograms of equilibrium and non-equilibrium data sets.
+ Shown dMRF predictions are for models where the local fields 
+\begin_inset Formula $\{h_{i}\}$
+\end_inset
+
+ are not estimated.
  D) Comparison of global configurational state transition probabilities
  predicted in dMRF trained on non-equilibrium data set against the true
  reference values.
@@ -1217,13 +1242,12 @@ status open
 \begin_layout Plain Layout
 Comparison of dMRF and MSM describing back-bone torsion dynamics of the
  pentapeptide Trp-Leu-Ala-Leu-Leu (WLALL).
- A) 95% confidence intervals of MSM (orange) and dMRF (blue) implied time-scales.
- B) Global state distribution computed according to dMRF and MSMs.
- C) Convergence of global state distribution with increasing simulation
- data.
+ A) Molecular structure render of the WLALL peptide in stick representation.
+ B) 95% confidence intervals of MSM (orange) and dMRF (blue) implied time-scales.
+ C) Global state distribution computed according to dMRF and MSMs.
  Confidence intervals in A and B are computed using bootstrap with replacement.
- Shown Markov states (in B, C) are those observed in all 24 trajectories,
- dMRF state probabilities are renormalized to this set.
+ Markov states shown in C are those observed in all 24 trajectories; dMRF
+ state probabilities are renormalized to this set.
  
 \begin_inset CommandInset label
 LatexCommand label
@@ -1256,7 +1280,7 @@ Above we saw how the dMRF framework can recapitulate the dynamics of MSMs,
  meta-stable configurations not observed during simulation we estimated
  several dMRFs designed to be selectively blind towards a particular meta-stable
  state.
- We use previously published simulation data of two fast-folding proteins,
+ We specifically data of two fast-folding proteins previously published,
  villin and BBA
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -1272,20 +1296,38 @@ key "LindorffLarsen2011"
 \begin_inset Formula $\alpha/\beta$
 \end_inset
 
- folds respectively, to test this.
+ folds respectively.
  
 \end_layout
 
 \begin_layout Standard
 For villin and BBA we respectively built a five and a four state hidden
- Markov model (HMM).
- From the HMM we obtain a meta-stable state assignment for each frame in
- the MD trajectories, which we use to sub-sampled the original MD data,
- to generate training data for dMRFs construction (see SI for details).
+ Markov model (HMM)
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Noe2013"
+
+\end_inset
+
+.
+ Using the HMM we assign the MD trajectories to meta-stable states.
+ We use the meta-stable assignments to sub-sample the original data to generate
+ data-sets which are specifically blind towards one of the 5 or 4 meta-stable
+ states.
+ These sub-sampled data-sets are used for estimating dMRFs each of which
+ in turn are 'blind' to one meta-stable configuration (see SI for details).
  From the estimated dMRFs we simulate synthetic trajectories of the time-evoluti
 on of the sub-systems.
- We can directly compare the macroscopic stationary and dynamics properties
- from these synthetic simulations to the original MD data (Fig.
+ We find that the dMRFs generally sample the same configurational space
+ as the full MD simulations, yet with skewed populations (Fig.
+ S3).
+ This suggests that although the predicted thermodynamics in the blinded
+ dMRFs is not quantitatively accurate, the sampled space is realistic.
+\end_layout
+
+\begin_layout Standard
+Next we quantitatively compare the macroscopic stationary and dynamics propertie
+s from these synthetic simulations to HMMs estimated the full MD data (Fig.
  
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -1294,11 +1336,7 @@ reference "fig:meta-stable_villin_bba"
 \end_inset
 
 ).
- 
-\end_layout
-
-\begin_layout Standard
-Remarkably, we find that the synthetic trajectories sample configurations
+ Remarkably, we find that the synthetic trajectories sample configurations
  which have not been observed during training, and in the majority of cases
  with a population comparable to the MD simulation (Fig.
  
@@ -1308,8 +1346,8 @@ reference "fig:meta-stable_villin_bba"
 
 \end_inset
 
-A).
- Reconstructing molecular configurations from the sub-state represention
+A/D).
+ Reconstructing molecular configurations from the sub-system represention
  in which the synthetic trajectories are encoded generally has a small error
  (Fig.
  
@@ -1319,13 +1357,20 @@ reference "fig:meta-stable_villin_bba"
 
 \end_inset
 
-B), suggesting that the microscopic configurations sampled by dMRFs are
- realistic.
- Finally, we inspect the time-correlation function of the Lys 71 
-\begin_inset Formula $\phi$
-\end_inset
+B/E), suggesting that the microscopic configurations sampled by dMRFs indeed
+ are realistic.
+ Inspecting the reconstructed molecular trajectories we see that the meta-stable
+ configurations generally are meta-stable, that is, they remain in the same
+ meta-stable state for several frames (See supporting information for details
+ and GIF animations).
+ 
+\end_layout
 
- rotameric state in the reference trajectory in villin (Fig.
+\begin_layout Standard
+Finally, we inspect the time-correlation function (TCF) of the rotameric
+ state of a backbone torsion angle in the reference simulations of villin
+ and BBA and compare them to corresponding TCFs from the dMRF trajectories
+ (Fig.
  
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -1333,19 +1378,11 @@ reference "fig:meta-stable_villin_bba"
 
 \end_inset
 
-C) and ..
- in BBA () we find that the these are generally predicted well by the dMRFs
- – however, with a notable exeception.
- The correlation function computed by the dMRF where state 4 was left out
- fails to capture the characteristic decay, State 4 for villin corresponds
- to the folded configuration, and the transition of rotameric states in
- Lys 71 
-\begin_inset Formula $\phi$
-\end_inset
-
- are tightly coupled to folding.
- So although we can predict realistic configurations of the folded without
- having explicitly observed it is not meta-stable according to the dMRF.
+C/F).
+ We find these generally agree well, although the dMRFs tend to over-estimate
+ the relaxation rates slightly.
+ This is particularly clear for the TCFs calculated from dMRFs blinded to
+ the folded configurations (state red/4 in both cases).
  
 \end_layout
 
@@ -1368,7 +1405,10 @@ status open
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-.
+Molecular renders of meta-stable configurations identified by HMMs of villin
+ (A) and BBA (B), using a ribbon representation.
+ Color/meta-stable state relationship: Blue/1, Orange/2, Green/3, Red/4
+ Purple/5.
 \begin_inset CommandInset label
 LatexCommand label
 name "fig:meta-stable_villin_bba"
@@ -1407,20 +1447,27 @@ status open
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Prediction of macroscopic stationary and dynamic properties of BBA with
- dMRFs.
- A) Meta-stable state distributions sampled by dMRFs estimated leaving data
- from one of four meta-stable state out during estimation and using the
- full data set (hatched).
+Prediction of macroscopic stationary and dynamic properties of fast folding
+ proteins Villin and BBA with dMRFs.
+ A/D) Meta-stable state distributions sampled by dMRFs estimated leaving
+ data from one of four meta-stable state out during estimation and using
+ the full data set (hatched).
  Reference distribution estimated using a hidden Markov model (HMM) estimated
  with the full MD data-set (orange).
- B) Histograms of reconstruction errors of atomistic models from sub-system
+ B/E) Histograms of reconstruction errors of atomistic models from sub-system
  encoded trajectories sampled by dMRFs (Hamming distance).
- C) Auto-correlation function of the rotameric state of the 
+ C) Normalized auto-correlation function of the rotameric state of the 
 \begin_inset Formula $\phi$
 \end_inset
 
- torsion of Lys 71 in the dMRF models and the simulation data.
+ torsion of Lys 71 in Villin as sampled by the dMRF models and in the simulation
+ data.
+ F) Normalized auto-correlation function of the rotameric state of the 
+\begin_inset Formula $\phi$
+\end_inset
+
+ torsion of Glu 17 in BBA as sampled by the dMRF models and in the simulation
+ data.
 \begin_inset CommandInset label
 LatexCommand label
 name "fig:Prediction-of-macroscopic-1"
@@ -1446,11 +1493,29 @@ Discussion and Conclusions
 
 \begin_layout Standard
 MSMs rely on a global discretization of the molecules’ state space.
- A single state variable characterizes the state of the molecule, and evolves
- as a Markov jump process in time [16].
- To obtain an accurate model of the timescales larger than τ, the number
- of states that are metastable at this timescale defines the minimum number
- of states, and thus also parameters, that must be used in an MSM [15, 49].
+ In other words, the state of the molecule is described by a single state
+ variable which evolves as a Markov jump process in time 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "BowmanPandeNoe_MSMBook"
+
+\end_inset
+
+.
+ To obtain an accurate model of the timescales larger than 
+\begin_inset Formula $\tau$
+\end_inset
+
+, the number of states that are metastable at this timescale defines the
+ minimum number of states, and thus also parameters, that must be used in
+ an MSM 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "SarichNoeSchuette_MMS09_MSMerror,Prinz2011"
+
+\end_inset
+
+.
  Thus, being able to parametrize an MSM from a realistic amount of simulation
  data requires that the number of metastable states is not too large.
 \end_layout
@@ -1458,10 +1523,24 @@ MSMs rely on a global discretization of the molecules’ state space.
 \begin_layout Standard
 Indeed, MSMs were particularly successful for protein systems that are either
  small or sufficiently co-operative to possess only few metastable states
- [8, 12, 23, 33, 50].
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Noe2009,Plattner2017,Kohlhoff2013,Bowman2012"
+
+\end_inset
+
+.
  This approach is not scalable to large molecular systems.
  Multi-domain or multi-protein systems likely possess at least partially
- uncoupled subunits with internal metastable states [37].
+ uncoupled subunits with internal metastable states 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Faelber2011"
+
+\end_inset
+
+.
  A molecular system characterized by 
 \begin_inset Formula $N$
 \end_inset
@@ -1478,14 +1557,14 @@ Indeed, MSMs were particularly successful for protein systems that are either
 \end_layout
 
 \begin_layout Standard
-In this paper, we introduce the concept of dynamic graphical models and
- their use to model molecular kinetics.
+In this paper, we introduce the concept of dynamic graphical models (DGM)
+ and their use to model molecular kinetics.
  The general approach encodes molecular conformations into multiple sub-systems;
  global configurational states are therefore encoded indirectly as a concatenati
 on of several local variables.
- As dynamic graphical models only model the interaction between sub-systems
- it can an exponential number of global configurations can be represented
- with a small number of parameters.
+ As DGMs only model the pair-wise interactions between sub-systems an exponentia
+l number of global configurations can be represented with a quadratic number
+ of parameters.
  We illustrate dynamic graphical models using a generalization of the dynamic
  Ising model — the dynamic Markov random fields (dMRFs).
 \end_layout
@@ -1520,7 +1599,8 @@ a priori
 on (decoding) is generally a difficult problem.
  Second, although efficient regularized maximum likelihood estimators are
  readily available, optimally chosing regularization factors remains heuristic.
- Third, the compact parametric form comes with limited expressive power.
+ Third, the compact parametric form of the dMRFs comes with limited expressive
+ power.
  It is specifically assumed that the sub-system couplings are 
 \emph on
 not
@@ -1545,6 +1625,7 @@ key "Noe2011,Olsson2017"
 
 , involve sampling dMRFs which could be both time-consuming and difficult,
  in particular when no sub-system decoding is possible.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -1596,16 +1677,12 @@ key "Gerber2014"
 
 \end_inset
 
- Their method is motivated as a causal model, i.e.
+ Their method is motivated as a Granger causality model, i.e.
  the current rotameric configurations causally encodes a probability density
  of rotameric states at a future time.
- Effectively their approach is closely related to the dMRFs: the linear
- causality is generally implemented as a constrained linear regression problem
- with a time-lag, whereas the dMRFs can be estimated by an unconstrained
- logistic/softmax regression problem.
- The linear causality model sports many of the same advantages as the dMRFs,
- yet their practical implementation is more ambiguous and generally less
- practical, compared to dMRFs.
+ Their model can be seen as a special case of the DGMs which is implemented
+ by a constrained linear regression problem with a time-lag.
+ 
 \end_layout
 
 \begin_layout Standard
