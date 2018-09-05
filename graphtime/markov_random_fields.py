@@ -41,21 +41,25 @@ class dMRF(object):
         else:
             _s = start.copy()
 
-        #pre-generate random numbers gives very slight speedups for large nsteps
-        rnd = _np.random.rand((nsteps-1)*self.nsubsys_).reshape((self.nsubsys_, nsteps - 1))
-        
         _states = _np.zeros((self.nsubsys_, nsteps))
         _states[:, 0] = _s.copy()
 
         idx_ = [lr.classes_.tolist() for lr in self.lrs]
 
+        # define implicit functions for sub-system sampling.
+        # this avoids using np.random.multinomial for binary sub-systems
+        # which can lead to a significant speedup
+        
+        state_samplers = [(lambda es, lr:lr.predict_proba(es).ravel()[0]<_np.random.rand() )
+            if len(i)==2 else (lambda es, lr:_np.random.multinomial(1, 
+                                              pvals = lr.predict_proba(es).ravel()).argmax())
+                                              for i in idx_  ]
+
         for n in range(nsteps-1):
             #for every sub-system sample new configuration given current global configuration
-            encoded_state = self.encoder.transform(_states[:, n].reshape(-1, 1))
-            cmfs = _np.cumsum([lr.predict_proba(encoded_state).ravel() for lr in self.lrs], axis = 1)
-            for j in range(self.nsubsys_):
-                _states[j, n + 1] = idx_[j][_np.searchsorted(cmfs[j, :], rnd[j, n])]
-
+            encoded_state = self.encoder.transform(_states[:, n].reshape(1, -1))
+            for j, (sampler, lr) in enumerate(zip(state_samplers, self.lrs)):
+                _states[j, n + 1] = idx_[j][sampler(encoded_state, lr)]
         return _states.T
 
     def generate_transition_matrix(self, safemode = True, maxdim = 10000):

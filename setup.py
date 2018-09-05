@@ -16,5 +16,6 @@ setup(
         "scikit-learn >= 0.19.0",
         "scipy >= 1.1.0",
         "msmtools >= 1.2.1",
+        "pyemma >= 2.5.2"
     ],
 )
