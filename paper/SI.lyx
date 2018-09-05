@@ -458,16 +458,9 @@ Consider the case with a single binary, uncoupled sub-system
 \end_inset
 
 .
- We may use the expression of transition probabilities from the main text
- (eq.
- 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:full_tdens"
-
-\end_inset
-
-) to define the transition probability matrix of this system
+ We may use the expression of transition probabilities (eq.
+ 3 in the main text) to define the transition probability matrix of this
+ system
 \end_layout
 
 \begin_layout Standard
@@ -1567,7 +1560,102 @@ name "fig:Comparison-of-sub-system-1"
 
 \end_inset
 
-Supporting GIFs 
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="2" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top" width="0pt">
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Villin
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+BBA
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename SI_data/prev_villin-0.png
+	width 40theight%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename SI_data/prev_bba-0.png
+	width 40text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+250 frames reconstructed from dMRF simulations of models estimated without
+ folded state (state 4).
+ GIF files showing animation can be found in other supporting material.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard

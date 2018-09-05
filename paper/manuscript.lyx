@@ -206,8 +206,8 @@ key "Bowman_JCP09_Villin,BowmanPandeNoe_MSMBook,Olsson2017b"
 \end_layout
 
 \begin_layout Standard
-MSMs and related Master equation-based models describe the transition probabilit
-ies between mutually exclusive segments of configuration space 
+MSMs and related Master equation-based models describe a Markov jump-process
+ between mutually exclusive configurational states 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "Prinz2011,Husic2018"
@@ -240,43 +240,82 @@ s thus rapidly becomes intractable.
  The challenge of larger proteins is further exercerbated by the increased
  over-head due to the large number of particles to be repesented in the
  simulation box.
+ Consequently, these methods will not scale to large molecular systems.
 \end_layout
 
 \begin_layout Standard
 In this paper, we propose an alternative approach to obtaining statistical
  models of molecular kinetics.
- The strategy presented here distinguishes itself compared to the methods
- discussed above by the way the molecular configurations are represented
- 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "Gerber2014"
-
-\end_inset
-
-.
+ The strategy distinguishes itself compared to the methods discussed above
+ by the way the molecular configurations are represented.
  We depart from global and mutually exclusive configurational states, instead
  we consider a configurational state as a concatenation of several locally
- defined sub-system configurations.
+ defined sub-systems and their configurations.
+ With this representation we construct a probabilistic model which gives
+ us a distribution over all the sub-system configurations at a time, given
+ their configuration at previous times – dynamic graphical models (DGM).
+\end_layout
+
+\begin_layout Standard
+Our findings suggests that using localized representations provides an interesti
+ng and potentially powerful new way to model molecular kinetics.
+ The localized representation caters to a compact parametric form which
+ can be robustly estimated using relatively little simulation data, yet
+ readily predict beyond the training domain, and can thereby speed up the
+ discovery of meta-stable states.
+ However, ambiguity in the sub-system encoding and similarly in decoding
+ predictions from a sub-system encoded configuration tos a molecular structure
+ remains challenging when deploying dMRFs.
+ Nevertheless, we envision that this work will stimulate further research
+ in to the use of alternative, more statistically efficient ways to encode
+ molecular representation when modeling molecular kinetics.
+\end_layout
+
+\begin_layout Section*
+Dynamic graphical models
+\end_layout
+
+\begin_layout Standard
+Current methods used to simulate and analyse molecular dynamics do not allow
+ statistically sufficient simulations of large molecules as the number of
+ metastable states grow too rapidly with molecule size.
+ The origin of this poor scaling is due to the encoding of molecular configurati
+ons using a single state variable, 
+\begin_inset Formula $S$
+\end_inset
+
+, which means that the number of configurations which are meta-stable on
+ a time-scale of 
+\begin_inset Formula $\tau$
+\end_inset
+
+ necessarily puts a lower bound on the number of parameters necessary to
+ encode the molecular kinetics.
  
 \end_layout
 
 \begin_layout Standard
-A sub-system can, for instance, be a torsion angle with several rotameric
- configurations or two residues being in contact or not.
- With this representation we construct a probabilistic model which gives
- us a distribution over all the sub-system configurations at a time, given
- their configuration at previous times.
- A simple example of such a model is a set of independent Markovian models
- which describe localized conformational changes: rotamer jumps or contact
- formation/breaking.
- This example assumes statistical independence of the dynamics of the different
- sub-systems which is violated in many practical cases, for example the
- rotameric states of tightly packed side-chains in the hydrophobic core
- of a protein.
- To account for statistical dependencies between the sub-systems defined
- we will need to explicitly model the interaction between the sub-systems.
- 
+Here, we propose a new strategy which uses several localized features (
+\emph on
+sub-systems
+\emph default
+, 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+) to represent molecular configurations.
+ A global molecular configuration is therefore only indirectly encoded as
+ a concatenation of states of the sub-systems, 
+\begin_inset Formula $S=\{\sigma_{i}\}_{i}^{N}$
+\end_inset
+
+.
+ The departure from a global state variable used in conventional methodology,
+ necessitates a novel model structure which encodes the time-evolution of
+ the molecular sub-systems.
+ In this work we propose the dynamic graphical models (DGM).
+ DGMs are graphical models which encode the interaction between molecular
+ sub-systems and their time-evolution.
 \end_layout
 
 \begin_layout Standard
@@ -333,7 +372,7 @@ key "Ravikumar2010,Parise2006"
 \end_layout
 
 \begin_layout Standard
-We here introduce the dynamic MRF (dMRF).
+We here introduce the dynamic MRF (dMRF) as an implementation of DGMs.
  The dMRF provides a first approximation of a model which uses multiple
  localized configurations to describe the dynamics of a molecular system.
  We present statistical estimators of dMRFs and show how dMRFs can recapitulate
@@ -345,25 +384,6 @@ We here introduce the dynamic MRF (dMRF).
  Our results demonstrate that it is possible to learn system-specific rules
  about how different configurational sub-systems interplay.
  
-\end_layout
-
-\begin_layout Standard
-Our findings suggests that using localized representations provides an interesti
-ng and potentially powerful new way to model molecular kinetics.
- The localized representation caters to a compact parametric form which
- can be robustly estimated using relatively little simulation data, yet
- readily predict beyond the training domain, and can thereby speed up the
- discovery of meta-stable states.
- However, ambiguity in the sub-system encoding and similarly in decoding
- predictions from a sub-system encoded configuration tos a molecular structure
- remains challenging when deploying dMRFs.
- Nevertheless, we envision that this work will stimulate further research
- in to the use of alternative, more statistically efficient ways to encode
- molecular representation when modeling molecular kinetics.
-\end_layout
-
-\begin_layout Subsection*
-Dynamic graphical models
 \end_layout
 
 \begin_layout Standard
@@ -433,21 +453,6 @@ Illustrative comparison of molecular representations in Markov state models
 \end_inset
 
 
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-TODO: Outline general idea of dynamic graphical models and their use to
- model kinetics in molecular systems.
- 
 \end_layout
 
 \end_inset
@@ -717,7 +722,9 @@ reference "eq:ising"
 \end_inset
 
 .
- 
+ In the Supporting information we discuss and analyse the dMRF model parameters
+ further, and show their dependence on intrinsic system properties (Fig.
+ S1).
 \end_layout
 
 \begin_layout Standard
@@ -979,7 +986,7 @@ B) regardless of whether we choose to estimate the external field parameters,
 \begin_inset Formula $h_{i}$
 \end_inset
 
-, or not (Fig S1).
+, or not (Fig S2).
  This means that the unbiased sub-system couplings can be recovered from
  a biased data-set, in turn suggesting that global state distributions can
  be estimated from biased data.
@@ -1323,6 +1330,10 @@ on of the sub-systems.
  S3).
  This suggests that although the predicted thermodynamics in the blinded
  dMRFs is not quantitatively accurate, the sampled space is realistic.
+ This finding is mirrored by the fact that statistical properties of the
+ configurations sampled by the dMRF closely agree with their MD counterparts
+ (Figs.
+ S4 and S5)
 \end_layout
 
 \begin_layout Standard
@@ -1361,8 +1372,8 @@ B/E), suggesting that the microscopic configurations sampled by dMRFs indeed
  are realistic.
  Inspecting the reconstructed molecular trajectories we see that the meta-stable
  configurations generally are meta-stable, that is, they remain in the same
- meta-stable state for several frames (See supporting information for details
- and GIF animations).
+ meta-stable state for several frames (Fig.
+ S6).
  
 \end_layout
 
