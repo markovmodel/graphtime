@@ -123,10 +123,10 @@ class TestdMRFIsing(unittest.TestCase):
         synth_traj2 = IsingDMRF2.simulate(nsteps = 2)
 
         self.assertTrue(np.allclose(synth_traj, np.array([[ 1, 1, 1], 
-                                                          [-1, 1,-1]])))
+                                                          [ 1, 1, 1]])))
 
-        self.assertTrue(np.allclose(synth_traj2, np.array([[ 1,-1, 1], 
-                                                           [-1, 1,-1]])))
+        self.assertTrue(np.allclose(synth_traj2, np.array([[ -1, 1, -1], 
+                                                           [ -1, 1, -1]])))
 
     def test_dmrf_Ising_strided_estimate(self):
         """ estimation with 3 binary uncoupled spins, compares strided and unstrided self-coupling estimates """
