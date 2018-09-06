@@ -1320,7 +1320,15 @@ key "Noe2013"
  Using the HMM we assign the MD trajectories to meta-stable states.
  We use the meta-stable assignments to sub-sample the original data to generate
  data-sets which are specifically blind towards one of the 5 or 4 meta-stable
- states.
+ states (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:meta-stable_villin_bba"
+
+\end_inset
+
+A/B).
  These sub-sampled data-sets are used for estimating dMRFs each of which
  in turn are 'blind' to one meta-stable configuration (see SI for details).
  From the estimated dMRFs we simulate synthetic trajectories of the time-evoluti
@@ -1342,7 +1350,7 @@ s from these synthetic simulations to HMMs estimated the full MD data (Fig.
  
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "fig:meta-stable_villin_bba"
+reference "fig:Prediction-of-macroscopic-1"
 
 \end_inset
 
@@ -1353,7 +1361,7 @@ reference "fig:meta-stable_villin_bba"
  
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "fig:meta-stable_villin_bba"
+reference "fig:Prediction-of-macroscopic-1"
 
 \end_inset
 
@@ -1364,7 +1372,7 @@ A/D).
  
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "fig:meta-stable_villin_bba"
+reference "fig:Prediction-of-macroscopic-1"
 
 \end_inset
 
