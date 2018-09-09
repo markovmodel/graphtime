@@ -238,7 +238,7 @@ ly with the size of the molecular system.
  Generating simulation data which sample all possible configurational transition
 s thus rapidly becomes intractable.
  The challenge of larger proteins is further exercerbated by the increased
- over-head due to the large number of particles to be repesented in the
+ over-head due to the large number of particles to be represented in the
  simulation box.
  Consequently, these methods will not scale to large molecular systems.
 \end_layout
@@ -276,21 +276,30 @@ Dynamic graphical models
 \end_layout
 
 \begin_layout Standard
-Current methods used to simulate and analyse molecular dynamics do not allow
- statistically sufficient simulations of large molecules as the number of
- metastable states grow too rapidly with molecule size.
- The origin of this poor scaling is due to the encoding of molecular configurati
-ons using a single state variable, 
+Current methods used to simulate and analyze molecular dynamics do not allow
+ statistically sufficient simulations of large molecules.
+ This is due to the encoding of molecular configurations using a single
+ discrete state variable, 
 \begin_inset Formula $S$
 \end_inset
 
-, which means that the number of configurations which are meta-stable on
- a time-scale of 
+.
+ (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Illustrative-comparison-of"
+
+\end_inset
+
+) Consequently, as the number of metastable states grow, so does the number
+ of parameters necessary to describe the molecular kinetics of the system.
+ The number of configurational states metastable on a time-scale of 
 \begin_inset Formula $\tau$
 \end_inset
 
- necessarily puts a lower bound on the number of parameters necessary to
- encode the molecular kinetics.
+ can grow exponentially with the size of the molecular system leading to
+ an explosion in the number of parameters necessary to describe the system.
  
 \end_layout
 
@@ -304,8 +313,16 @@ sub-systems
 \end_inset
 
 ) to represent molecular configurations.
- A global molecular configuration is therefore only indirectly encoded as
- a concatenation of states of the sub-systems, 
+ (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Illustrative-comparison-of"
+
+\end_inset
+
+) A global molecular configuration is therefore only indirectly encoded
+ as a concatenation of states of the sub-systems, 
 \begin_inset Formula $S=\{\sigma_{i}\}_{i}^{N}$
 \end_inset
 
@@ -410,7 +427,7 @@ Illustrative comparison of molecular representations in Markov state models
  (MSM) and dynamic graphical models (DGM).
  Upper panel shows cartoon representation of different protein conformational
  states.
- MIddle panel show MSM where the current Markov state is indicated by, 
+ Middle panel show MSM where the current Markov state is indicated by, 
 \begin_inset Formula $S_{i}$
 \end_inset
 
@@ -448,6 +465,13 @@ Illustrative comparison of molecular representations in Markov state models
 
 .
  
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Illustrative-comparison-of"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -570,8 +594,8 @@ key "Ravikumar2010,Roudi2009"
 \end_layout
 
 \begin_layout Standard
-In the context of molecular simulations and kinetics our data does not consitute
- independently and identically drawn samples from a configurational equilibrium
+In the context of molecular simulations and kinetics our data does not constitut
+e independently and identically drawn samples from a configurational equilibrium
  distribution, rather we have a time-series of a molecular system.
  In other words, we have samples from a conditional distribution 
 \begin_inset Formula $p(\mathbf{s}_{t}\mid\mathbf{s}_{t-\tau})$
@@ -722,7 +746,7 @@ reference "eq:ising"
 \end_inset
 
 .
- In the Supporting information we discuss and analyse the dMRF model parameters
+ In the Supporting information we discuss and analyze the dMRF model parameters
  further, and show their dependence on intrinsic system properties (Fig.
  S1).
 \end_layout
@@ -1138,9 +1162,9 @@ ons which have not been observed during training.
  couplings are independent on the global state – for molecular systems this
  is generally not the case.
  We used molecular dynamics simulation data of a small penta-peptide system
- (WLALL) to test whether dMRFs could be a viable scheme for modelling molecular
+ (WLALL) to test whether dMRFs could be a viable scheme for modeling molecular
  kinetics.
- This system is sufficently small to enable detailed microscopic analysis
+ This system is sufficiently small to enable detailed microscopic analysis
  with MSMs while exerting meta-stability.
 \end_layout
 
@@ -1366,7 +1390,7 @@ reference "fig:Prediction-of-macroscopic-1"
 \end_inset
 
 A/D).
- Reconstructing molecular configurations from the sub-system represention
+ Reconstructing molecular configurations from the sub-system representation
  in which the synthetic trajectories are encoded generally has a small error
  (Fig.
  
@@ -1596,7 +1620,7 @@ In general, we find the dMRFs, in spite of their compact parametric form
  Beyond the capabilities of MSMs, dMRF also allow for the prediction of
  transitions to and from unobserved molecular conformations and their stationary
  probabilities.
- Specifically, we found that dMRFs can predict the predict the prescence
+ Specifically, we found that dMRFs can predict the predict the presence
  of meta-stable configurations which have not been observed during model
  estimation, although their absolute probabilities are not always accurately
  captured.
@@ -1608,7 +1632,7 @@ With the change in representation necessary to use dMRF come new technical
  challenges and limitations.
  First, identifying important sub-systems and how these should be encoded
  is not trivial.
- Specfically, we currently do not have a governing principle to gauge different
+ Specifically, we currently do not have a governing principle to gauge different
  sub-system encodings against each other 
 \emph on
 a priori
@@ -1617,7 +1641,7 @@ a priori
  Similarly, going from an encoded representation back to a molecular configurati
 on (decoding) is generally a difficult problem.
  Second, although efficient regularized maximum likelihood estimators are
- readily available, optimally chosing regularization factors remains heuristic.
+ readily available, optimally choosing regularization factors remains heuristic.
  Third, the compact parametric form of the dMRFs comes with limited expressive
  power.
  It is specifically assumed that the sub-system couplings are 
@@ -1670,7 +1694,11 @@ key "Goodfellow-et-al-2016"
 .
  The identification of sub-systems and their discretization is highly non-linear
  and akin to the featurization, projection and discretization process whose
- success critically determines the success of Markov state modelling .
+ success critically determines the success of Markov state 
+\lang american
+modeling
+\lang english
+ .
  The VAMPnets approach recently illustrated how the featurization, projection
  and discretization pipeline of MSM building could be replaced by a deep
  neutral network
@@ -1716,7 +1744,7 @@ We anticipate the use of dMRFs or related methods can be broadly applied
 
  could enable a spatial decomposition or large molecular systems into conditiona
 lly independent fragments, more amenable for simulation.
- The ability of dMRFs to predict unobserved global configuration could futher
+ The ability of dMRFs to predict unobserved global configuration could further
  be used to in an adaptive simulation setting, where previously unobserved
  states are reconstructed and used to seed new molecular simulations.
  
@@ -1748,7 +1776,7 @@ on.
  Further, a theoretical generalization of dMRF to cases where sub-system
  may adopt more than two discrete states along with their constrained and
  unconstrained maximum likelihood estimators is available.
- Finally auxillary results including figures and movies illustrating properties
+ Finally auxiliary results including figures and movies illustrating properties
  of the estimated models may are shown in the supporting material.
 \end_layout
 
