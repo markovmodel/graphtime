@@ -1,0 +1,16 @@
+build/
+.vscode/
+*__pycache__*
+*.egg-info
+dist/
+*.pyc
+files.txt
+*.pdf
+*.png
+*\#*#
+*[#]*
+*[~]*
+*-checkpoint.ipynb 
+*.DS_store
+paper/Coverletter.*
+.eggs/*
