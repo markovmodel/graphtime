@@ -1202,7 +1202,7 @@ As opposed to MSMs, dMRFs yield a transition probability for all possible
  more precise estimation of parameters with less data, effectively meaning
  that dMRFs are more data-efficient that MSMs.
  The smaller error-bars on the dMRF implied time-scales suggest that this
- may be the case (Fig.
+ is the case (Fig.
  
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -1211,24 +1211,7 @@ reference "fig:pentapep"
 \end_inset
 
 B).
- However, to more quantitatively compare the data-efficiency of MSMs and
- dMRFs we estimated multiple dMRFs and MSMs with increasing volumes of molecular
- dynamics data.
- Using the estimated models we compute the stationary probabilities of Markov
- states visited in all trajectories (Fig.
  
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "fig:pentapep"
-
-\end_inset
-
-C).
- We find the predicted stationary probabilities converge at lower data-volumes
- for dMRFs compared to MSMs in particular for low-probability states.
- However, since there is a discrepancy between the predicted stationary
- probabilities for the low probability states and we do not have an exhaustive
- data-set at hand, we cannot gauge which of the predictions are more accurate.
 \end_layout
 
 \begin_layout Standard

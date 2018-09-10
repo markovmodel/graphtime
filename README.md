@@ -1,11 +1,11 @@
 # graphtime 
 A python module for generation and analysis of undirected graphical models encoding transition densities.
 
-In particular, `graphtime` implements _dynamic Markov random fields_ (dMRF) or "dynamic Ising models". These models use a molecular representation different from 
-a single global state, used in for example Markov state models. Instead, a molecular configuration is represented by multiple discrete representations (_sub-systems_), fx torsion-angles or contacts. 
+In particular, `graphtime` implements _dynamic Markov random fields_ (dMRF) or "dynamic Ising models", as a particular case of dynamic graphical models (DGM). DGMs represent molecular configurations using multiple features (_sub-systems_), fx torsion-angles or contacts.  This is in contrast to the single global state, used in for example Markov state models. The advantage of this kind of model is that the number of parameters needed to be estimated is only quadratic in the number of sub-system states, rather than being exponential in the number of meta-stable states. 
+
 The dMRFs models the interactions between the different sub-systems, or more specifically, how a current configuration of the sub-systems encode the distribution of sub-system states at a time $t+\tau$ in the future. The dMRFs are like Markov state models, fully probabilistic. 
 
-Although this library was developed with application to molecular systems in mind, there is currently no functionality to analyse and featurize molecular simulation data within `graphtime` and this is not planned. However, there are several packages that does this including `MDTraj`, `pyEMMA` and `mdanalysis`. `graphtime` depends on a `straj` as input for estimation, which has the dimensions of $k\times N$, with $k$ being the number of sub-systems and $N$ being the number of frames in the molecular simulation. 
+Although this library was developed with application to molecular systems in mind, there is currently no functionality to analyse and featurize molecular simulation data within `graphtime` and this is not planned. However, there are several packages that does this including `MDTraj`, `pyEMMA` and `mdanalysis`. `graphtime` depends on a `straj` as input for estimation, which is a list of `numpy` arrays with the dimensions $k\times N$, with $k$ being the number of sub-systems and $N$ being the number of frames a the molecular simulation. 
 
 Further details can be found in the manuscript:
 
@@ -21,8 +21,6 @@ The `graphtime` library is minimalisitic and makes extensive use of `numpy` and 
 - scipy >= 1.1.0
 - msmtools >= 1.2.1
 - pyemma >= 2.5.2
-
-The libary has only been tested Mac OSX.
 
 ### Installation
 

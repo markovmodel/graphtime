@@ -13,3 +13,4 @@ files.txt
 *-checkpoint.ipynb 
 *.DS_store
 paper/Coverletter.*
+.eggs/README.txt
