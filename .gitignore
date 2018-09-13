@@ -5,8 +5,8 @@ build/
 dist/
 *.pyc
 files.txt
-*.pdf
-*.png
+#*.pdf
+#*.png
 *\#*#
 *[#]*
 *[~]*
