@@ -1,5 +1,5 @@
 # graphtime 
-A python module for generation and analysis of undirected graphical models encoding transition densities.
+A python module for estimation and analysis of dynamic graphical models to encode transition densities.
 
 In particular, `graphtime` implements _dynamic Markov random fields_ (dMRF) or "dynamic Ising models", as a particular case of dynamic graphical models (DGM). DGMs represent molecular configurations using multiple features (_sub-systems_), fx torsion-angles or contacts.  This is in contrast to the single global state, used in for example Markov state models. The advantage of this kind of model is that the number of parameters needed to be estimated is only quadratic in the number of sub-system states, rather than being exponential in the number of meta-stable states. 
 
