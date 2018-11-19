@@ -9,7 +9,7 @@ Although this library was developed with application to molecular systems in min
 
 Further details can be found in the manuscript:
 
-S. Olsson and F. Noé "Dynamic Graphical Models of Molecular Kinetics" _in preparation._
+S. Olsson and F. Noé "Dynamic Graphical Models of Molecular Kinetics" _in review._ [pre-print](https://www.biorxiv.org/content/early/2018/11/09/467050)
 
 
 ### Dependencies
