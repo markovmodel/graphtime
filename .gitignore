@@ -14,3 +14,4 @@ files.txt
 *.DS_store
 paper/Coverletter.*
 .eggs/*
+node_modules/
